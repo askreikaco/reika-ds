@@ -3,6 +3,12 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version without the v prefix, e.g. 0.1.0. Must match packages/react/package.json.'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -14,9 +20,28 @@ concurrency:
 jobs:
   release:
     name: release
+    # Manual dispatch is allowed only from main. Tag pushes are unaffected.
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            version="$INPUT_VERSION"
+          else
+            version="${GITHUB_REF_NAME#v}"
+          fi
+          pkg_version=$(node -p "require('./packages/react/package.json').version")
+          if [ "$version" != "$pkg_version" ]; then
+            echo "version $version does not match packages/react/package.json $pkg_version" >&2
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -25,8 +50,15 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-      - run: node scripts/pack-release.mjs
-      - name: Create GitHub release
+      - name: Pack release tarballs
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          set -euo pipefail
+          export RELEASE_TAG="v$VERSION"
+          node scripts/pack-release.mjs
+      - name: Create GitHub release (creates the tag at the dispatched commit)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" release/* --generate-notes
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: gh release create "v$VERSION" release/* --target "$GITHUB_SHA" --generate-notes
