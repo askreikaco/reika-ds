@@ -8,6 +8,14 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "extract": "node scripts/extract-app-values.mjs"
+  },
+  "dependencies": {
+    "@carbon/colors": "11.62.0",
+    "@carbon/layout": "11.61.0",
+    "@carbon/motion": "11.54.0",
+    "@carbon/themes": "11.83.0",
+    "@carbon/type": "11.69.0"
   }
 }
