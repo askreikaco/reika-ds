@@ -4,7 +4,7 @@ import { mkdtempSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { packRelease } from './pack-release.mjs';
+import { assertTagMatches, packRelease } from './pack-release.mjs';
 
 const VERSION = '0.1.0';
 const TARBALLS = [
@@ -81,5 +81,29 @@ describe('pack-release', () => {
         .digest('hex');
       expect(hash).toBe(actual);
     }
+  });
+});
+
+describe('tag guard', () => {
+  it('compares the tag when the ref is a tag and it matches', () => {
+    expect(() =>
+      assertTagMatches('0.1.0', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.1.0' }),
+    ).not.toThrow();
+  });
+
+  it('throws when a tag does not match the package version', () => {
+    expect(() =>
+      assertTagMatches('0.1.0', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.2.0' }),
+    ).toThrow(/does not match package version v0.1.0/);
+  });
+
+  it('skips PR refs such as "20/merge"', () => {
+    expect(() =>
+      assertTagMatches('0.1.0', { GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: '20/merge' }),
+    ).not.toThrow();
+  });
+
+  it('skips when no ref env is set (local runs)', () => {
+    expect(() => assertTagMatches('0.1.0', {})).not.toThrow();
   });
 });

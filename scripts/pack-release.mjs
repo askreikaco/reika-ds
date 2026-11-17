@@ -72,6 +72,16 @@ function rewriteTarball(file, packages, version) {
   }
 }
 
+// Only a real tag push is compared against the package version. PR and
+// branch runs have GITHUB_REF_NAME such as "20/merge", which is skipped.
+export function assertTagMatches(version, env = process.env) {
+  if (env.GITHUB_REF_TYPE !== 'tag') return;
+  const tag = env.GITHUB_REF_NAME;
+  if (tag !== `v${version}`) {
+    throw new Error(`git tag ${tag} does not match package version v${version}`);
+  }
+}
+
 export function packRelease({ root = ROOT, outDir = join(root, 'release') } = {}) {
   const packages = loadPackages(root);
   const versions = [...new Set(packages.map((p) => p.version))];
@@ -80,10 +90,7 @@ export function packRelease({ root = ROOT, outDir = join(root, 'release') } = {}
   }
   const [version] = versions;
 
-  const tag = process.env.GITHUB_REF_NAME;
-  if (tag && tag !== `v${version}`) {
-    throw new Error(`git tag ${tag} does not match package version v${version}`);
-  }
+  assertTagMatches(version);
 
   execFileSync(
     'npm',
