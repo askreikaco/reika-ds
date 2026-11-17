@@ -5,12 +5,12 @@ Status: setting up. Plan: packages/tokens, packages/styles, packages/react, pack
 
 ## Install
 
-No registry account or token needed. Install from the GitHub release tarballs (v0.1.2):
+No registry account or token needed. Install from the GitHub release tarballs (v0.1.3):
 
 ```sh
-npm i https://github.com/askreikaco/reika-ds/releases/download/v0.1.2/reika-ds-react-0.1.2.tgz \
-      https://github.com/askreikaco/reika-ds/releases/download/v0.1.2/reika-ds-styles-0.1.2.tgz \
-      https://github.com/askreikaco/reika-ds/releases/download/v0.1.2/reika-ds-tokens-0.1.2.tgz
+npm i https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-react-0.1.3.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-styles-0.1.3.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-tokens-0.1.3.tgz
 ```
 
 Each tarball's internal dependencies point at the matching release asset, so the URLs above resolve without npm registry access. `SHA256SUMS` is attached to each release. Publishing to the npm registry is planned for later.
@@ -33,6 +33,21 @@ Each entry also ships as `.min.css`. The React components need `react` 18.3.1 an
 ```sh
 npm i react@18.3.1 react-dom@18.3.1
 ```
+
+## Router links (`linkAs`)
+
+`ListRow` and `Card` (with `href`) render a plain `<a>` by default. To navigate client-side, pass an element with `linkAs`. The library does not import any router: write a small adapter in the app. React Router's `Link` takes `to`, not `href`, so the adapter maps it:
+
+```jsx
+import { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
+
+const RouterLink = forwardRef(({ href, ...rest }, ref) => <Link ref={ref} to={href} {...rest} />);
+
+<ListRow title="Example row" href="/rules/1" linkAs={RouterLink} />
+```
+
+`linkAs` receives the same class names, `href` and children as the default `<a>`. Without it the output is unchanged.
 
 ## Development
 

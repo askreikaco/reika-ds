@@ -135,3 +135,11 @@ body {
 .catalog__frame {
   inline-size: 100%;
 }
+
+.catalog__code {
+  margin: 0;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  font-size: 0.75rem;
+}

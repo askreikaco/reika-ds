@@ -1,6 +1,11 @@
 import { Button } from '@carbon/react';
+import { Add } from '@carbon/icons-react';
 import { Card } from '@reika-ds/react';
 import { Cell, Section } from './shared';
+
+// Router adapter, shown as code only: the catalog has no router dependency.
+const ROUTER_LINK_SNIPPET = `const RouterLink = forwardRef((p, ref) => <Link ref={ref} to={p.href} {...omit(p, 'href')} />);
+<Card title="Example card" href="/rules/1" linkAs={RouterLink}>Example body text.</Card>`;
 
 export function CardPage() {
   return (
@@ -27,6 +32,18 @@ export function CardPage() {
             Example body text.
           </Card>
         </Cell>
+        <Cell label="title, action">
+          <Card
+            title="Example card"
+            action={
+              <Button kind="ghost" size="sm" renderIcon={Add}>
+                Add rule
+              </Button>
+            }
+          >
+            Example body text.
+          </Card>
+        </Cell>
         <Cell label="footer">
           <Card title="Example card" footer="Example footer: updated Example Co, 2 items.">
             Example body text.
@@ -34,6 +51,11 @@ export function CardPage() {
         </Cell>
         <Cell label="no header">
           <Card>Example body text, no header.</Card>
+        </Cell>
+      </Section>
+      <Section title="Router link (linkAs)">
+        <Cell label="snippet">
+          <pre className="catalog__code">{ROUTER_LINK_SNIPPET}</pre>
         </Cell>
       </Section>
       <Section title="Body modifiers">

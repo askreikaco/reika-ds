@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import { ContainedListItem } from '@carbon/react';
 import { ChevronRight, Warning } from '@carbon/icons-react';
 
@@ -15,6 +15,8 @@ export interface ListRowProps {
   chevron?: boolean;
   /** Makes the row a link. */
   href?: string;
+  /** Element used for the link (default 'a'). Pass a router adapter to navigate client-side, for example one wrapping react-router's Link. */
+  linkAs?: ElementType;
   /** Makes the row a button. */
   onClick?: () => void;
   density?: 'default' | 'compact';
@@ -36,6 +38,7 @@ export function ListRow({
   end,
   chevron = false,
   href,
+  linkAs = 'a',
   onClick,
   density = 'default',
   muted = false,
@@ -69,11 +72,12 @@ export function ListRow({
   );
 
   if (href && !disabled) {
+    const LinkAs = linkAs;
     return (
       <ContainedListItem className={classes}>
-        <a className="rds-list-row__hit" href={href}>
+        <LinkAs className="rds-list-row__hit" href={href}>
           {content}
-        </a>
+        </LinkAs>
       </ContainedListItem>
     );
   }

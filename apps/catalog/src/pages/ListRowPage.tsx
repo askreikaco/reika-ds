@@ -3,11 +3,21 @@ import { ContainedList } from '@carbon/react';
 import { ListRow, StatusTag } from '@reika-ds/react';
 import { Section } from './shared';
 
+// Router adapter, shown as code only: the catalog has no router dependency.
+const ROUTER_LINK_SNIPPET = `const RouterLink = forwardRef((p, ref) => <Link ref={ref} to={p.href} {...omit(p, 'href')} />);
+<ListRow title="Example row" href="/rules/1" linkAs={RouterLink} />`;
+
 export function ListRowPage() {
   const [last, setLast] = useState('none');
 
   return (
     <>
+      <Section title="Router link (linkAs)">
+        <div className="catalog__cell">
+          <span className="catalog__cell-label">snippet</span>
+          <pre className="catalog__code">{ROUTER_LINK_SNIPPET}</pre>
+        </div>
+      </Section>
       <Section title="Variants">
         <div style={{ inlineSize: '100%' }}>
           <ContainedList label="Example list" kind="on-page">
