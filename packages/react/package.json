@@ -27,7 +27,7 @@
     "@carbon/react": "1.118.0"
   },
   "dependencies": {
-    "@carbon/icons-react": "^11.90.0",
+    "@carbon/icons-react": "11.90.0",
     "@reika-ds/styles": "*"
   },
   "devDependencies": {

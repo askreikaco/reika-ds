@@ -60,10 +60,21 @@
     @include type.type-style('label-01');
   }
 
+  // Value and sparkline share one row; the sparkline keeps a fixed width and sits on the value's baseline.
+  &__figure {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: sp.$spacing-05;
+    min-inline-size: 0;
+  }
+
   &__sparkline {
     display: block;
-    inline-size: 100%;
-    padding-block-start: sp.$spacing-03;
+    flex: 0 0 auto;
+    inline-size: 7.5rem;
+    max-inline-size: 40%;
+    padding-block-end: sp.$spacing-01;
   }
 
   &--tile {

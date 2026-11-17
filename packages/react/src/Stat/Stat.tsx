@@ -36,7 +36,10 @@ export function Stat({ label, value, sub, size = 'md', tone = 'neutral', trend, 
   const body = (
     <>
       <span className="rds-stat__label">{label}</span>
-      <span className={`rds-stat__value rds-stat__value--${size} rds-stat__value--${tone}`}>{value}</span>
+      <span className="rds-stat__figure">
+        <span className={`rds-stat__value rds-stat__value--${size} rds-stat__value--${tone}`}>{value}</span>
+        {sparkline ? <span className="rds-stat__sparkline">{sparkline}</span> : null}
+      </span>
       {sub ? <span className="rds-stat__sub">{sub}</span> : null}
       {trend ? (
         <span className={`rds-stat__trend rds-stat__trend--${trend.dir}`}>
@@ -44,7 +47,6 @@ export function Stat({ label, value, sub, size = 'md', tone = 'neutral', trend, 
           <span>{trend.text}</span>
         </span>
       ) : null}
-      {sparkline ? <span className="rds-stat__sparkline">{sparkline}</span> : null}
     </>
   );
 

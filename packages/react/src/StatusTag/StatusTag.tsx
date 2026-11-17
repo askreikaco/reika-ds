@@ -14,6 +14,13 @@ export const STATUS_TONE_TYPE = {
   cool: 'cool-gray',
 } as const satisfies Record<StatusTone, string>;
 
+export interface StatusTagLabels {
+  /** Accessible name of the dismiss button. */
+  dismiss?: string;
+}
+
+const DEFAULT_LABELS: Required<StatusTagLabels> = { dismiss: 'Dismiss' };
+
 export interface StatusTagProps {
   tone?: StatusTone;
   /** Tag text. A string, because the dismissible variant needs one. */
@@ -25,14 +32,17 @@ export interface StatusTagProps {
   count?: number;
   /** Adds a dismiss button when set. */
   onClose?: () => void;
+  /** Built-in strings, English by default. */
+  labels?: StatusTagLabels;
 }
 
 const ICON_SIZE_DEFAULT = 16;
 const ICON_SIZE_LG = 20;
 
 // Carbon Tag draws its own renderIcon only at md and lg, so the icon is rendered here, as the first child.
-export function StatusTag({ tone = 'neutral', children, icon: Icon, size = 'sm', count, onClose }: StatusTagProps) {
+export function StatusTag({ tone = 'neutral', children, icon: Icon, size = 'sm', count, onClose, labels }: StatusTagProps) {
   const type = STATUS_TONE_TYPE[tone];
+  const dismissLabel = labels?.dismiss ?? DEFAULT_LABELS.dismiss;
   const hasCount = count !== undefined;
   const iconSize = size === 'lg' ? ICON_SIZE_LG : ICON_SIZE_DEFAULT;
   const iconEl = Icon ? (
@@ -47,7 +57,7 @@ export function StatusTag({ tone = 'neutral', children, icon: Icon, size = 'sm',
     return (
       <span className="rds-status-tag rds-status-tag--dismissible">
         {iconEl}
-        <DismissibleTag type={type} size={size} text={text} onClose={() => onClose()} />
+        <DismissibleTag type={type} size={size} text={text} title={dismissLabel} onClose={() => onClose()} />
       </span>
     );
   }

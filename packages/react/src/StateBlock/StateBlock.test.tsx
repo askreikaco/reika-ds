@@ -74,4 +74,14 @@ describe('StateBlock', () => {
     render(<StateBlock kind="error" />);
     expect(screen.getByRole('alert')).toHaveTextContent('Something went wrong');
   });
+
+  it('labels replace the default retry and error title', () => {
+    const onRetry = vi.fn();
+    render(<StateBlock kind="error" onRetry={onRetry} labels={{ retry: 'Example again', errorTitle: 'Example error title' }} />);
+    expect(screen.getByRole('alert')).toHaveTextContent('Example error title');
+    expect(screen.queryByText('Something went wrong')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Example again' }));
+    expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+  });
 });

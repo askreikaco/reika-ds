@@ -3,6 +3,15 @@ import { Button, InlineNotification, SkeletonText, Tile } from '@carbon/react';
 
 export type StateKind = 'empty' | 'loading' | 'error' | 'locked' | 'notFound';
 
+export interface StateBlockLabels {
+  /** Error only: Retry button text. */
+  retry?: string;
+  /** Error only: notice title when no title prop is given. */
+  errorTitle?: string;
+}
+
+const DEFAULT_LABELS: Required<StateBlockLabels> = { retry: 'Retry', errorTitle: 'Something went wrong' };
+
 export interface StateBlockProps {
   kind: StateKind;
   title?: string;
@@ -12,16 +21,17 @@ export interface StateBlockProps {
   action?: ReactNode;
   /** Error only: adds a Retry button. */
   onRetry?: () => void;
+  /** Built-in strings, English by default. */
+  labels?: StateBlockLabels;
 }
 
-const DEFAULT_ERROR_TITLE = 'Something went wrong';
-const DEFAULT_RETRY_LABEL = 'Retry';
 const ICON_SIZE = 32;
 
 // One block for every empty, loading, error, locked and not-found state.
 // loading: skeleton, role status. error: inline notice, role alert, Retry when onRetry is set.
 // empty, locked, notFound: tile with optional icon, title, message and action.
-export function StateBlock({ kind, title, message, icon: Icon, action, onRetry }: StateBlockProps) {
+export function StateBlock({ kind, title, message, icon: Icon, action, onRetry, labels }: StateBlockProps) {
+  const labelSet = { ...DEFAULT_LABELS, ...labels };
   if (kind === 'loading') {
     return (
       <div className="rds-state-block rds-state-block--loading" data-kind={kind} role="status" aria-busy="true">
@@ -38,7 +48,7 @@ export function StateBlock({ kind, title, message, icon: Icon, action, onRetry }
         <InlineNotification
           kind="error"
           role="alert"
-          title={title ?? DEFAULT_ERROR_TITLE}
+          title={title ?? labelSet.errorTitle}
           hideCloseButton
           lowContrast
         />
@@ -47,7 +57,7 @@ export function StateBlock({ kind, title, message, icon: Icon, action, onRetry }
           <div className="rds-state-block__actions">
             {onRetry ? (
               <Button kind="tertiary" size="sm" onClick={onRetry}>
-                {DEFAULT_RETRY_LABEL}
+                {labelSet.retry}
               </Button>
             ) : null}
             {action}

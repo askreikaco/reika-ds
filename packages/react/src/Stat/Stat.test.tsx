@@ -53,6 +53,14 @@ describe('Stat', () => {
     expect(container.querySelector('.rds-stat__value')).toHaveClass('rds-stat__value--md');
   });
 
+  it('sparkline sits in the same row as the value', () => {
+    const { container } = render(<Stat label="Example label" value="98" sparkline={<TestSpark />} />);
+    const figure = container.querySelector('.rds-stat__figure');
+    expect(figure).not.toBeNull();
+    expect(figure?.querySelector('.rds-stat__value')).toHaveTextContent('98');
+    expect(figure?.querySelector('.rds-stat__sparkline')).toContainElement(screen.getByTestId('spark'));
+  });
+
   it('as="td" renders a table cell', () => {
     const { container } = render(
       <table>

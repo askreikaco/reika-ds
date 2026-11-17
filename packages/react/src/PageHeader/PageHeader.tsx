@@ -12,6 +12,13 @@ export interface PageHeaderCrumb {
   href: string;
 }
 
+export interface PageHeaderLabels {
+  /** Accessible name of the breadcrumb navigation. */
+  breadcrumb?: string;
+}
+
+const DEFAULT_LABELS: Required<PageHeaderLabels> = { breadcrumb: 'Breadcrumb' };
+
 export interface PageHeaderProps {
   title: string;
   subtitle?: ReactNode;
@@ -24,17 +31,19 @@ export interface PageHeaderProps {
   breadcrumb?: PageHeaderCrumb[];
   /** 1 renders an h1 (page), 2 renders an h2 (section within a page). */
   level?: 1 | 2;
+  /** Built-in strings, English by default. The back link text is passed in back.label. */
+  labels?: PageHeaderLabels;
 }
 
 // Page title row: optional breadcrumb, back link, title, subtitle, meta and actions.
-export function PageHeader({ title, subtitle, back, meta, actions, breadcrumb, level = 1 }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, back, meta, actions, breadcrumb, level = 1, labels }: PageHeaderProps) {
   const Heading = level === 1 ? 'h1' : 'h2';
   const lastIndex = breadcrumb ? breadcrumb.length - 1 : -1;
 
   return (
     <header className="rds-page-header">
       {breadcrumb && breadcrumb.length > 0 ? (
-        <Breadcrumb noTrailingSlash className="rds-page-header__breadcrumb">
+        <Breadcrumb noTrailingSlash className="rds-page-header__breadcrumb" aria-label={labels?.breadcrumb ?? DEFAULT_LABELS.breadcrumb}>
           {breadcrumb.map((crumb, index) => (
             <BreadcrumbItem
               key={`${crumb.href}-${index}`}

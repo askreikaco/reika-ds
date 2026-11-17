@@ -49,4 +49,12 @@ describe('PageHeader', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Example section' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
   });
+
+  it('labels.breadcrumb replaces the default navigation name', () => {
+    render(
+      <PageHeader title="Example page" breadcrumb={[{ label: 'Example root', href: '#root' }]} labels={{ breadcrumb: 'Example trail' }} />,
+    );
+    expect(screen.getByRole('navigation', { name: 'Example trail' })).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Breadcrumb' })).toBeNull();
+  });
 });

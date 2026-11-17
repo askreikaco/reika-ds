@@ -51,4 +51,10 @@ describe('StatusTag', () => {
     const { container } = render(<StatusTag>Example status</StatusTag>);
     expect(container.querySelector('.cds--tag')).toHaveClass('cds--tag--gray');
   });
+
+  it('labels.dismiss replaces the default dismiss name', () => {
+    render(<StatusTag labels={{ dismiss: 'Example remove' }} onClose={() => {}}>Example status</StatusTag>);
+    expect(screen.getByRole('button', { name: 'Example remove' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull();
+  });
 });

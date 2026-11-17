@@ -68,4 +68,10 @@ describe('Card', () => {
     expect(container.querySelector('.rds-card--flush')).not.toBeNull();
     expect(container.querySelector('.rds-card--bare')).not.toBeNull();
   });
+
+  it('labels.info replaces the default info button name', () => {
+    render(<Card info="Example info text" labels={{ info: 'Example info label' }}>Example body</Card>);
+    expect(screen.getByRole('button', { name: 'Example info label' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'More information' })).toBeNull();
+  });
 });

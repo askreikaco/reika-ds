@@ -2,6 +2,13 @@ import type { ReactNode } from 'react';
 import { ClickableTile, Tile, Toggletip, ToggletipButton, ToggletipContent } from '@carbon/react';
 import { Information } from '@carbon/icons-react';
 
+export interface CardLabels {
+  /** Accessible name of the info button. */
+  info?: string;
+}
+
+const DEFAULT_LABELS: Required<CardLabels> = { info: 'More information' };
+
 export interface CardProps {
   title?: ReactNode;
   /** Small secondary text in the header, after the title. */
@@ -22,14 +29,16 @@ export interface CardProps {
   href?: string;
   className?: string;
   children?: ReactNode;
+  /** Built-in strings, English by default. */
+  labels?: CardLabels;
 }
 
-const INFO_LABEL = 'More information';
 const ICON_SIZE = 16;
 
 // Carbon Tile with an optional header (title, meta, info, action), body and footer.
 // Every part renders only when its prop is set.
-export function Card({ title, meta, info, action, footer, flush = false, bare = false, embedded = false, href, className, children }: CardProps) {
+export function Card({ title, meta, info, action, footer, flush = false, bare = false, embedded = false, href, className, children, labels }: CardProps) {
+  const infoLabel = labels?.info ?? DEFAULT_LABELS.info;
   const hasHead = Boolean(title || meta || info || action);
   const Heading = embedded ? 'h3' : 'h2';
   const classes = [
@@ -52,7 +61,7 @@ export function Card({ title, meta, info, action, footer, flush = false, bare = 
               {meta ? <span className="rds-card__meta">{meta}</span> : null}
               {info ? (
                 <Toggletip align="bottom-end" autoAlign>
-                  <ToggletipButton label={INFO_LABEL}>
+                  <ToggletipButton label={infoLabel}>
                     <Information size={ICON_SIZE} aria-hidden="true" />
                   </ToggletipButton>
                   <ToggletipContent>{info}</ToggletipContent>
