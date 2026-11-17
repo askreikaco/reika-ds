@@ -3,6 +3,18 @@ REIKA design system. Built on IBM Carbon (npm dependency, not a fork): tokens, s
 
 Status: setting up. Plan: packages/tokens, packages/styles, packages/react, packages/web, apps/catalog.
 
+## Install
+
+No registry account or token needed. Install from the GitHub release tarballs (v0.1.0):
+
+```sh
+npm i https://github.com/askreikaco/reika-ds/releases/download/v0.1.0/reika-ds-react-0.1.0.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.1.0/reika-ds-styles-0.1.0.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.1.0/reika-ds-tokens-0.1.0.tgz
+```
+
+Each tarball's internal dependencies point at the matching release asset, so the URLs above resolve without npm registry access. `SHA256SUMS` is attached to each release. Publishing to the npm registry is planned for later.
+
 ## Development
 
 ```sh
