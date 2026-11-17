@@ -46,6 +46,19 @@ describe('StateBlock', () => {
     expect(screen.queryByRole('button')).toBeNull();
   });
 
+  it('loading with a message renders that text inside the status region', () => {
+    const { container } = render(<StateBlock kind="loading" message="Loading rules..." />);
+    expect(screen.getByRole('status')).toHaveTextContent('Loading rules...');
+    expect(container.querySelector('.cds--inline-loading')).not.toBeNull();
+    expect(container.querySelector('.cds--skeleton__text')).not.toBeNull();
+  });
+
+  it('loading without a message has no inline loading line', () => {
+    const { container } = render(<StateBlock kind="loading" />);
+    expect(container.querySelector('.cds--inline-loading')).toBeNull();
+    expect(container.querySelector('.rds-state-block__message')).toBeNull();
+  });
+
   it('error: notice with role alert and the given title', () => {
     render(<StateBlock kind="error" title="Example failure" message="Example detail" />);
     const alert = screen.getByRole('alert');

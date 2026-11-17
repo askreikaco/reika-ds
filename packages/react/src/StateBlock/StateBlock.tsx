@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-import { Button, InlineNotification, SkeletonText, Tile } from '@carbon/react';
+import { Button, InlineLoading, InlineNotification, SkeletonText, Tile } from '@carbon/react';
 
 export type StateKind = 'empty' | 'loading' | 'error' | 'locked' | 'notFound';
 
@@ -15,6 +15,7 @@ const DEFAULT_LABELS: Required<StateBlockLabels> = { retry: 'Retry', errorTitle:
 export interface StateBlockProps {
   kind: StateKind;
   title?: string;
+  /** Loading: text line shown beside a spinner. Other kinds: paragraph under the title. */
   message?: ReactNode;
   /** Carbon icon for the tile kinds (empty, locked, notFound). Error uses the notice icon. */
   icon?: ElementType;
@@ -36,7 +37,7 @@ export function StateBlock({ kind, title, message, icon: Icon, action, onRetry, 
     return (
       <div className="rds-state-block rds-state-block--loading" data-kind={kind} role="status" aria-busy="true">
         {title ? <p className="rds-state-block__title">{title}</p> : null}
-        {message ? <p className="rds-state-block__message">{message}</p> : null}
+        {message ? <InlineLoading status="active" description={message} /> : null}
         <SkeletonText paragraph lineCount={3} />
       </div>
     );
