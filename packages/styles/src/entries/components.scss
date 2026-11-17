@@ -1,0 +1,3 @@
+// Entry for dist/reika-ds.components.css: component classes only (rds-*).
+// No Carbon base, no theme (:root / data-theme), no rk- utilities. Apps that already load Carbon use this.
+@forward '../component-list';

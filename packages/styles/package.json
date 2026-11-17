@@ -1,12 +1,23 @@
 {
   "name": "@reika-ds/styles",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Carbon configured once, generated rk- utilities for Carbon gaps, and a consumer lint script.",
   "type": "module",
   "sideEffects": false,
   "main": "dist/reika-ds.css",
   "style": "dist/reika-ds.css",
+  "exports": {
+    ".": "./dist/reika-ds.css",
+    "./dist/reika-ds.css": "./dist/reika-ds.css",
+    "./dist/reika-ds.min.css": "./dist/reika-ds.min.css",
+    "./dist/reika-ds.components.css": "./dist/reika-ds.components.css",
+    "./dist/reika-ds.components.min.css": "./dist/reika-ds.components.min.css",
+    "./dist/reika-ds.utilities.css": "./dist/reika-ds.utilities.css",
+    "./dist/reika-ds.utilities.min.css": "./dist/reika-ds.utilities.min.css",
+    "./dist/scss/*": "./dist/scss/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist",
     "scripts",
@@ -19,7 +30,7 @@
   },
   "dependencies": {
     "@carbon/styles": "1.117.0",
-    "@reika-ds/tokens": "0.1.0",
+    "@reika-ds/tokens": "0.1.1",
     "sass": "1.105.2"
   },
   "devDependencies": {}

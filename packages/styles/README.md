@@ -28,6 +28,13 @@ Output: `:root` carries the Carbon g10 theme; `[data-theme="dark"]` and `prefers
 (unless `data-theme="light"`) carry g100. Carbon component CSS is not included here; use Carbon's own
 styles alongside it. Carbon's prefix is `cds`.
 
+Three CSS entries are shipped, each with a `.min.css`. Apps that already load Carbon's base CSS import only
+the first two (see the root README):
+
+- `dist/reika-ds.css`: Carbon base, theme, utilities and components.
+- `dist/reika-ds.components.css`: `rds-*` component styles only, no Carbon base or theme.
+- `dist/reika-ds.utilities.css`: `rk-*` utilities only.
+
 Sass consumers can also use `dist/scss/` (copies of the sources, with the tokens file inlined).
 
 ## Rules

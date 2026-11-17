@@ -1,0 +1,21 @@
+// Component partials (src/components/_<name>.scss), in the order reika-ds.css has always used. CSS only; no Carbon base.
+// Shared by src/index.scss (full bundle) and src/entries/components.scss (components-only entry).
+@forward 'components/status-tag';
+@forward 'components/state-block';
+@forward 'components/card';
+@forward 'components/stat';
+@forward 'components/list-row';
+@forward 'components/page-header';
+@forward 'components/app-shell';
+@forward 'components/toolbar';
+@forward 'components/sheet';
+@forward 'components/data-table';
+@forward 'components/choice-control';
+@forward 'components/field';
+@forward 'components/label-value';
+@forward 'components/settings-group';
+@forward 'components/tip';
+@forward 'components/progress';
+@forward 'components/num-cell';
+@forward 'components/thumb';
+@forward 'components/chart-card';
