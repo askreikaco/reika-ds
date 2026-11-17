@@ -1,0 +1,38 @@
+// Field: one labelled form input. Carbon draws the input, label and helper text; this file adds the optional
+// label, the checkbox and file rows (which Carbon draws without helper text) and the spacing between them.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-field {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$spacing-02;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+
+  &__optional {
+    color: var(--cds-text-secondary);
+  }
+
+  &__helper,
+  &__error {
+    margin: 0;
+    @include type.type-style('helper-text-01');
+  }
+
+  &__helper {
+    color: var(--cds-text-helper);
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: sp.$spacing-02;
+    color: var(--cds-text-error);
+  }
+
+  &__error-icon {
+    flex-shrink: 0;
+    fill: var(--cds-support-error);
+  }
+}

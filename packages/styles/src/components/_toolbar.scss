@@ -1,0 +1,81 @@
+// Toolbar: search, quick chips, filters, sort and columns above a list or table. Carbon controls inside;
+// this file lays them out and keeps every control at a touch-friendly height on phone.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$spacing-03;
+  min-inline-size: 0;
+
+  &__search {
+    inline-size: 100%;
+  }
+
+  // Quick chips scroll sideways inside their own row, so the page never scrolls sideways.
+  &__chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: sp.$spacing-02;
+    overflow-x: auto;
+    padding-block: 0.125rem;
+    scrollbar-width: thin;
+  }
+
+  // Tag used as a button: the whole chip is the touch target and shows its state with aria-pressed.
+  &__chip.cds--tag {
+    cursor: pointer;
+    flex-shrink: 0;
+    min-block-size: 2rem;
+    margin: 0;
+    border: 0;
+    font: inherit;
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: sp.$spacing-03;
+    min-inline-size: 0;
+  }
+
+  &__count {
+    color: var(--cds-text-secondary);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    @include type.type-style('label-01');
+  }
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: sp.$spacing-03;
+    margin-inline-start: auto;
+    min-inline-size: 0;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: sp.$spacing-03;
+  }
+
+  &__sort {
+    min-inline-size: 10rem;
+  }
+
+  // Compact density: the same controls at Carbon's small size, with tighter gaps.
+  &--compact {
+    gap: sp.$spacing-02;
+
+    .rds-toolbar__controls,
+    .rds-toolbar__filters {
+      gap: sp.$spacing-02;
+    }
+  }
+}

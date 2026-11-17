@@ -1,0 +1,102 @@
+// Sheet: Carbon ComposedModal in two placements. modal = centred dialog (Carbon). bottom = slides up from the
+// bottom edge, full width, with a grab handle and a footer that stays in view. The component picks the placement.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-sheet {
+  // Body and footer take the same side gutter as the Carbon modal header.
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: sp.$spacing-05;
+    padding-inline: sp.$spacing-05;
+  }
+
+  // Grab handle: only shown in the bottom placement.
+  &__handle {
+    display: none;
+    align-self: center;
+    inline-size: sp.$spacing-07;
+    block-size: 0.25rem;
+    margin-block: sp.$spacing-02 sp.$spacing-03;
+    border-radius: 0.125rem;
+    background: var(--cds-border-strong-01);
+  }
+
+  // Definition list of the values the user is about to confirm.
+  &__confirm {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: sp.$spacing-03 sp.$spacing-05;
+    margin: 0;
+  }
+
+  // Rows are wrappers only: the grid lays out the dt and dd cells.
+  &__confirm-row {
+    display: contents;
+  }
+
+  &__confirm-label {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &__confirm-value {
+    margin: 0;
+    overflow-wrap: anywhere;
+    @include type.type-style('body-compact-01');
+  }
+
+  // Footer: buttons at the end edge, wrapping on narrow widths.
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: sp.$spacing-03;
+    padding-block-start: sp.$spacing-05;
+    padding-inline: sp.$spacing-05;
+  }
+
+  &--bottom .rds-sheet__handle {
+    display: block;
+  }
+}
+
+// Bottom placement, on the ComposedModal container (containerClassName). Compound selectors only, so the rule
+// never reaches into Carbon internals by descendant.
+.rds-sheet.rds-sheet--bottom .rds-sheet__container {
+  position: fixed;
+  inset-block-start: auto;
+  inset-block-end: 0;
+  inset-inline: 0;
+  inline-size: 100%;
+  max-inline-size: none;
+  max-block-size: 85dvh;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 240ms ease-out;
+}
+
+.rds-sheet.rds-sheet--bottom.is-visible .rds-sheet__container {
+  transform: translate3d(0, 0, 0);
+}
+
+// The footer stays in view while the body scrolls.
+.rds-sheet.rds-sheet--bottom .rds-sheet__footer {
+  position: sticky;
+  inset-block-end: 0;
+  margin-block-start: auto;
+  padding-block-end: sp.$spacing-05;
+  background: var(--cds-layer-01);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rds-sheet.rds-sheet--bottom .rds-sheet__container {
+    transition: none;
+  }
+}
