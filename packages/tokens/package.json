@@ -1,0 +1,13 @@
+{
+  "name": "@reika-ds/tokens",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/tokens.json",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "vitest run"
+  }
+}
