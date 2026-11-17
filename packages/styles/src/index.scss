@@ -1,1 +1,4 @@
-// Placeholder: styles land in a later work package (see target spec).
+// @reika-ds/styles entry: tokens (Sass API), Carbon config + themes (CSS custom properties), rk- utilities (CSS).
+@forward 'tokens';
+@forward 'carbon';
+@forward 'utilities';

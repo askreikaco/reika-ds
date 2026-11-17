@@ -1,0 +1,22 @@
+// Carbon configured once for every REIKA app. Only this file may load @carbon/styles/scss/config.
+// Themes: g10 on :root, g100 under [data-theme="dark"] and under prefers-color-scheme (unless light is forced).
+@use '@carbon/styles/scss/config' with (
+  $css--font-face: false,
+  $prefix: 'cds'
+);
+@use '@carbon/styles/scss/theme';
+@use '@carbon/styles/scss/themes';
+
+:root {
+  @include theme.theme(themes.$g10);
+}
+
+[data-theme='dark'] {
+  @include theme.theme(themes.$g100);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include theme.theme(themes.$g100);
+  }
+}

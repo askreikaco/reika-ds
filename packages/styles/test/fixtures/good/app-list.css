@@ -1,0 +1,7 @@
+/* Good: plain CSS with zero and 1px only. */
+.app-list {
+  border-top: 1px solid var(--cds-border-subtle-01);
+  margin: 0;
+  max-inline-size: var(--rk-measure-text);
+  background: url(https://example.invalid/bg.png);
+}

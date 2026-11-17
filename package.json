@@ -17,5 +17,12 @@
   "devDependencies": {
     "typescript": "5.6.3",
     "vitest": "3.0.5"
+  },
+  "overrides": {
+    "@carbon/themes": "11.83.0",
+    "@carbon/colors": "11.62.0",
+    "@carbon/layout": "11.61.0",
+    "@carbon/motion": "11.54.0",
+    "@carbon/type": "11.69.0"
   }
 }
