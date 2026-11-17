@@ -110,3 +110,28 @@ body {
   color: var(--cds-text-secondary);
   font-size: 0.875rem;
 }
+
+/* Example frames: a containing block for the fixed AppShell header and tab bar; the phone frame is the full width. */
+.catalog__frame {
+  position: relative;
+  transform: translateZ(0);
+  block-size: 42rem;
+  max-inline-size: 100%;
+  overflow: hidden;
+  border: 0.0625rem solid var(--cds-border-subtle-01);
+}
+
+.catalog__wide {
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
+
+/* Cells that hold a full-width example stretch across the row. */
+.catalog__cell:has(> .catalog__frame),
+.catalog__cell:has(> .catalog__wide) {
+  inline-size: 100%;
+}
+
+.catalog__frame {
+  inline-size: 100%;
+}

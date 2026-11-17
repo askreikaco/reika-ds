@@ -1,0 +1,175 @@
+// AppShell: Carbon Header + SideNav (md and up), custom bottom tab bar (phone), main offset.
+@use 'sass:map';
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+@use '@carbon/styles/scss/breakpoint' as bp;
+@use '../tokens' as tk;
+
+// Carbon Header is 3rem tall and fixed; the SideNav is 16rem wide and fixed from md up.
+$header-height: 3rem;
+$side-width: 16rem;
+// Phone bottom bar: 56px tall (3.5rem) plus the device safe-area inset.
+$tabbar-height: 3.5rem;
+// Each tab is at least 48px (3rem) wide: the touch target.
+$tab-min-width: 3rem;
+
+.rds-app-shell {
+  min-inline-size: 0;
+
+  &__main {
+    min-inline-size: 0;
+    padding-block-start: $header-height;
+  }
+
+  // The header's own nav is hidden below lg by Carbon; the app switcher is a phone and tablet control too.
+  &__switcher.cds--header__nav {
+    display: block;
+    padding-inline-start: 0;
+  }
+
+  &__name {
+    overflow-wrap: anywhere;
+  }
+
+  &__group-title {
+    padding-block: sp.$spacing-04 sp.$spacing-02;
+    padding-inline: sp.$spacing-05;
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  // Icon with its dot and badge: the wrapper is the anchor for both (top-end corner of the icon).
+  &__icon-wrap {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      display: block;
+      fill: currentColor;
+    }
+  }
+
+  &__side-badge {
+    display: inline-flex;
+    margin-inline-start: sp.$spacing-03;
+  }
+
+  // lg and up: the side nav is open beside the content.
+  @include bp.breakpoint-up(lg) {
+    &__main {
+      margin-inline-start: $side-width;
+    }
+  }
+
+  // Phone: the bottom bar sits over the content, so the content keeps its last lines clear of it.
+  &--tabs &__main {
+    padding-block-end: calc(#{$tabbar-height} + env(safe-area-inset-bottom));
+  }
+
+  &__tabbar {
+    position: fixed;
+    z-index: map.get(tk.$z-layers, 'bar');
+    inset-inline: 0;
+    inset-block-end: 0;
+    box-sizing: border-box;
+    block-size: calc(#{$tabbar-height} + env(safe-area-inset-bottom));
+    padding-block-end: env(safe-area-inset-bottom);
+    background: var(--cds-layer-01);
+    border-block-start: 1px solid var(--cds-border-subtle-01);
+  }
+
+  &__tabs {
+    display: flex;
+    block-size: $tabbar-height;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__tab-item {
+    display: flex;
+    flex: 1 1 0;
+    min-inline-size: $tab-min-width;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  &__tab {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: sp.$spacing-01;
+    box-sizing: border-box;
+    min-block-size: $tab-min-width;
+    padding-inline: sp.$spacing-02;
+    color: var(--cds-text-secondary);
+    text-decoration: none;
+    @include type.type-style('label-01');
+
+    &--current {
+      color: var(--cds-text-primary);
+
+      // Current tab: a short bar on the top edge (2px).
+      &::before {
+        content: '';
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline: sp.$spacing-05;
+        block-size: 0.125rem;
+        background: var(--cds-interactive);
+      }
+    }
+
+    &:focus-visible {
+      outline: 0.125rem solid var(--cds-focus);
+      outline-offset: -0.125rem;
+    }
+  }
+
+  &__tab-icon {
+    fill: currentColor;
+  }
+
+  &__tab-label {
+    overflow: hidden;
+    max-inline-size: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Count badge: top-end corner of the icon.
+  &__tab-badge {
+    position: absolute;
+    inset-block-start: -0.25rem;
+    inset-inline-end: -0.75rem;
+  }
+
+  // Dot: top-end corner of the icon, 8px.
+  &__dot {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: -0.125rem;
+    inline-size: sp.$spacing-02;
+    block-size: sp.$spacing-02;
+    border-radius: 50%;
+    background: var(--cds-support-info);
+  }
+
+  // Screen-reader-only text (dot indicators).
+  &__sr {
+    position: absolute;
+    inline-size: 0.0625rem;
+    block-size: 0.0625rem;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

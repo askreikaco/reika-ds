@@ -1,0 +1,29 @@
+// DataTable: scroll region, numeric columns and the phone list. Carbon Table draws the table itself.
+@use '@carbon/styles/scss/spacing' as sp;
+
+.rds-data-table {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$spacing-03;
+  min-inline-size: 0;
+
+  // Wide tables scroll inside their own region; the page itself never scrolls sideways.
+  &__scroll {
+    overflow-x: auto;
+    max-inline-size: 100%;
+  }
+
+  // Two classes: Carbon sets text-align on table cells, and this must win over it.
+  .rds-data-table &__numeric {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}

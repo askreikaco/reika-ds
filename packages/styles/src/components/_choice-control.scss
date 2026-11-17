@@ -1,0 +1,63 @@
+// ChoiceControl: segmented, range (segmented with fixed ranges), dropdown, radio and chips. Carbon draws the
+// controls; this file adds the chips, the read-only value and the layout around them.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-choice {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$spacing-02;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: sp.$spacing-02;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Chip: a button with aria-pressed. The whole chip is the touch target (2.75rem high).
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    margin: 0;
+    padding-inline: sp.$spacing-04;
+    border: 0.0625rem solid var(--cds-border-strong-01);
+    border-radius: 1.5rem;
+    background: var(--cds-layer-01);
+    color: var(--cds-text-primary);
+    cursor: pointer;
+    @include type.type-style('label-01');
+
+    &[aria-pressed='true'] {
+      background: var(--cds-highlight);
+      border-color: var(--cds-interactive);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--cds-text-disabled);
+      border-color: var(--cds-border-disabled);
+    }
+
+    &:focus-visible {
+      outline: 0.125rem solid var(--cds-focus);
+      outline-offset: 0.125rem;
+    }
+  }
+
+  &__label {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &__readonly {
+    margin: 0;
+    color: var(--cds-text-primary);
+    @include type.type-style('body-compact-01');
+  }
+}
