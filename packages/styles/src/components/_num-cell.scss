@@ -1,0 +1,52 @@
+// NumCell: a number with tabular figures (rk-tabular), an optional unit and a trend line (icon, text, screen-reader word).
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-num-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: sp.$spacing-01;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+
+  &__figure {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: sp.$spacing-02;
+    min-inline-size: 0;
+  }
+
+  &__value {
+    color: var(--cds-text-primary);
+    overflow-wrap: anywhere;
+    @include type.type-style('body-01');
+  }
+
+  &__unit {
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: sp.$spacing-01;
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &--large &__value {
+    @include type.type-style('heading-05');
+  }
+
+  &--end {
+    align-items: flex-end;
+    text-align: end;
+  }
+
+  &--end &__figure {
+    justify-content: flex-end;
+  }
+}

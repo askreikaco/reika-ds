@@ -1,0 +1,21 @@
+// Tip: a Carbon Toggletip trigger. Only the term trigger gets its own styling (dotted underline on the word).
+@use '@carbon/styles/scss/type' as type;
+
+.rds-tip {
+  display: inline-flex;
+  max-inline-size: 100%;
+
+  &__term-text {
+    color: var(--cds-text-primary);
+    overflow-wrap: anywhere;
+    text-decoration: underline dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    font: inherit;
+  }
+
+  &--detail &__trigger {
+    color: var(--cds-link-primary);
+    @include type.type-style('label-01');
+  }
+}

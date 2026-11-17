@@ -1,6 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ChoiceControl, type ChoiceOption } from './ChoiceControl.js';
+import { PHONE_QUERY } from '../internal/useIsPhone.js';
+import tokens from '../../../tokens/src/tokens.json';
+import { setViewport } from '../../test/viewport.js';
 
 const options: ChoiceOption[] = [
   { id: 'day', label: 'Example day' },
@@ -43,6 +46,32 @@ describe('ChoiceControl', () => {
     fireEvent.click(screen.getByLabelText('Example week'));
     expect(onChange).toHaveBeenCalledWith('week');
     expect(screen.getByLabelText('Example month')).toBeDisabled();
+  });
+
+  describe('radio orientation', () => {
+    beforeEach(() => setViewport('desktop'));
+
+    it('phone width: the radio group is vertical; desktop width: horizontal', () => {
+      setViewport('phone');
+      const { unmount } = render(<ChoiceControl variant="radio" options={options} value="day" onChange={() => {}} label="Example period" />);
+      expect(document.querySelector('fieldset')).toHaveClass('cds--radio-button-group--vertical');
+      unmount();
+      setViewport('desktop');
+      render(<ChoiceControl variant="radio" options={options} value="day" onChange={() => {}} label="Example period" />);
+      expect(document.querySelector('fieldset')).not.toHaveClass('cds--radio-button-group--vertical');
+    });
+
+    it('orientation="horizontal" stays horizontal at phone width', () => {
+      setViewport('phone');
+      render(<ChoiceControl variant="radio" orientation="horizontal" options={options} value="day" onChange={() => {}} label="Example period" />);
+      expect(document.querySelector('fieldset')).not.toHaveClass('cds--radio-button-group--vertical');
+    });
+
+    it('the phone query is the Carbon md breakpoint minus 0.02rem, as in the tokens', () => {
+      const md = parseFloat(tokens.reika['breakpoint-md']);
+      const queryRem = parseFloat(PHONE_QUERY.match(/([\d.]+)rem/)?.[1] ?? 'NaN');
+      expect(queryRem + 0.02).toBeCloseTo(md, 5);
+    });
   });
 
   it('chips: a group of buttons with aria-pressed on the selected one', () => {

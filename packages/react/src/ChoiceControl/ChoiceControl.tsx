@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { useIsPhone } from '../internal/useIsPhone.js';
 import { ContentSwitcher, Dropdown, RadioButton, RadioButtonGroup, Switch, Tag } from '@carbon/react';
 
 export interface ChoiceOption {
@@ -25,11 +26,14 @@ export interface ChoiceControlProps {
   readonly?: boolean;
   /** Accessible name of the group (and the visible label for dropdown and radio). */
   label: string;
+  /** radio only: stacked or in a row. Default: vertical below md, horizontal from md up. */
+  orientation?: 'horizontal' | 'vertical';
 }
 
 // One choice from a short list. The variant decides the control; the options and value are the same for all.
-export function ChoiceControl({ variant, options, value, onChange, size = 'md', readonly = false, label }: ChoiceControlProps) {
+export function ChoiceControl({ variant, options, value, onChange, size = 'md', readonly = false, label, orientation }: ChoiceControlProps) {
   const baseId = useId();
+  const isPhone = useIsPhone();
   const selectedIndex = options.findIndex((option) => option.id === value);
   const selected = options[selectedIndex] ?? null;
 
@@ -66,11 +70,11 @@ export function ChoiceControl({ variant, options, value, onChange, size = 'md', 
     return (
       <div className="rds-choice rds-choice--radio">
         <RadioButtonGroup
+          orientation={orientation ?? (isPhone ? 'vertical' : 'horizontal')}
           name={`${baseId}-radio`}
           legendText={label}
           valueSelected={value}
           onChange={(next) => onChange(String(next))}
-          orientation="horizontal"
         >
           {options.map((option) => (
             <RadioButton key={option.id} value={option.id} id={`${baseId}-${option.id}`} labelText={option.label} disabled={option.disabled} />
