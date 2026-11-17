@@ -10,6 +10,8 @@ export interface DistTokens {
   carbon: { themes: Record<'light' | 'dark', { name: string; tokens: Record<string, string> }> };
   reika: Record<string, unknown>;
   chart: { light: string[]; dark: string[] };
+  palette: { light: Record<string, string>; dark: Record<string, string> };
+  sources: Record<string, string>;
 }
 export const distTokens = (): DistTokens => JSON.parse(dist('tokens.json')) as DistTokens;
 

@@ -99,7 +99,9 @@ async function genTokens() {
   const density = text.match(/density:\s*'([a-z]+)'/);
   if (!shadow || !density) throw new Error('extract: gen-ds-tokens.mjs has no shadow/density');
   out.shadow = shadow[1];
-  out.density = density[1];
+  const densityOptions = (await readFile(join(app, 'app/src/ds/tokens.ts'), 'utf8')).match(/DENSITIES = \[([^\]]+)\]/);
+  if (!densityOptions) throw new Error('extract: ds/tokens.ts has no DENSITIES');
+  out.density = { default: density[1], options: [...densityOptions[1].matchAll(/'([a-z]+)'/g)].map((m) => m[1]) };
   return out;
 }
 
@@ -117,10 +119,20 @@ async function chartPalette() {
 }
 
 const reika = { ...(await scssTokens()), ...(await layoutTokens()), ...(await genTokens()) };
+async function genPalette() {
+  // gen-ds-tokens.mjs lists the REIKA-only colours per theme (g10 light, g100 dark).
+  const text = await readFile(join(app, 'scripts/gen-ds-tokens.mjs'), 'utf8');
+  const light = text.match(/g10: \{ 'tag-background-green': '(#[0-9a-f]{6})' \}/);
+  const dark = text.match(/g100: \{ 'tag-background-green': '(#[0-9a-f]{6})' \}/);
+  if (!light || !dark) throw new Error('extract: gen-ds-tokens.mjs has no tag-background-green');
+  return { 'tag-background-green': { light: light[1], dark: dark[1] } };
+}
+
 const fixture = {
   source: 'reika-app: app/src/styles/_tokens.scss, app/src/ui/layout.ts, app/src/styles/charts.scss, scripts/gen-ds-tokens.mjs',
   reika: Object.fromEntries(Object.keys(reika).sort().map((k) => [k, reika[k]])),
   chart: await chartPalette(),
+  palette: await genPalette(),
 };
 
 await mkdir(dirname(outFile), { recursive: true });

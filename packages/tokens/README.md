@@ -8,7 +8,9 @@ Colours come from Carbon by key. REIKA adds only gaps.
 
 - Carbon colours are never copied. `src/tokens.json` names the theme (`g10` light, `g100` dark) and the build reads every token from `@carbon/themes` (pinned 11.83.0).
 - REIKA values exist only where Carbon has no token (layout widths, card and table padding, chart heights, z-layers, focus ring widths, breakpoints, icon sizes, radius 0, shadow none, density). Each one has its value in `src/tokens.json`.
-- The chart palette (5 categorical slots, light and dark) is the one REIKA colour set.
+- The chart palette (5 categorical slots, light and dark) is a REIKA colour set, written as hex in `src/tokens.json`.
+- REIKA colours with no Carbon token reference a Carbon palette name (`carbon-palette`, resolved from `@carbon/colors` 11.62.0, the version `@carbon/themes` 11.83.0 uses). `tag-background-green` is `green20` light and `green80` dark.
+- `_sources` names the app (workforce) source of each value the reika-app fixture cannot check.
 
 ## Files
 

@@ -18,7 +18,14 @@
     "content-w": "40rem",
     "content-w-max": "99rem",
     "content-w-wide": "64rem",
-    "density": "normal",
+    "density": {
+      "default": "normal",
+      "options": [
+        "compact",
+        "normal",
+        "roomy"
+      ]
+    },
     "focus-ring-inner": "1px",
     "focus-ring-outer": "2px",
     "icon-md": 20,
@@ -62,5 +69,11 @@
       "#ee538b",
       "#198038"
     ]
+  },
+  "palette": {
+    "tag-background-green": {
+      "light": "#a7f0ba",
+      "dark": "#044317"
+    }
   }
 }
