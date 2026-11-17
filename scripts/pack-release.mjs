@@ -72,9 +72,16 @@ function rewriteTarball(file, packages, version) {
   }
 }
 
-// Only a real tag push is compared against the package version. PR and
-// branch runs have GITHUB_REF_NAME such as "20/merge", which is skipped.
+// RELEASE_TAG (set by the release workflow, e.g. v0.1.0) is checked whenever
+// it is set, so manual dispatch is guarded too. Otherwise only a real tag push
+// is compared against the package version. PR and branch runs have
+// GITHUB_REF_NAME such as "20/merge", which is skipped.
 export function assertTagMatches(version, env = process.env) {
+  if (env.RELEASE_TAG) {
+    if (env.RELEASE_TAG !== `v${version}`) {
+      throw new Error(`RELEASE_TAG ${env.RELEASE_TAG} does not match package version v${version}`);
+    }
+  }
   if (env.GITHUB_REF_TYPE !== 'tag') return;
   const tag = env.GITHUB_REF_NAME;
   if (tag !== `v${version}`) {

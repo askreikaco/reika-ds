@@ -106,4 +106,13 @@ describe('tag guard', () => {
   it('skips when no ref env is set (local runs)', () => {
     expect(() => assertTagMatches('0.1.0', {})).not.toThrow();
   });
+
+  it('compares RELEASE_TAG on a branch run (manual dispatch)', () => {
+    expect(() =>
+      assertTagMatches('0.1.0', { RELEASE_TAG: 'v0.1.0', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
+    ).not.toThrow();
+    expect(() =>
+      assertTagMatches('0.1.0', { RELEASE_TAG: 'v0.2.0', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
+    ).toThrow(/RELEASE_TAG v0.2.0 does not match package version v0.1.0/);
+  });
 });
