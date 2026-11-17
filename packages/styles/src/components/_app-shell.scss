@@ -38,12 +38,6 @@ $tab-min-width: 3rem;
     @include type.type-style('label-01');
   }
 
-  // Regular weight for side nav items. Carbon sets the link weight from this token; its selected
-  // (aria-current) style keeps its own 600 and the left bar, so the current item stays semibold.
-  &__sidenav {
-    --cds-heading-compact-01-font-weight: 400;
-  }
-
   // Icon with its dot and badge: the wrapper is the anchor for both (top-end corner of the icon).
   &__icon-wrap {
     position: relative;
