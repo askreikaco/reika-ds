@@ -51,6 +51,9 @@ export function StateBlockPage() {
         <Cell label="with title and message">
           <StateBlock kind="loading" title="Example loading" message="Loading example items." />
         </Cell>
+        <Cell label="with message">
+          <StateBlock kind="loading" message="Loading rules..." />
+        </Cell>
       </Section>
       <Section title="Error">
         <Cell label="with Retry">
