@@ -1,0 +1,21 @@
+// Good: tokens only, Carbon classes used as-is, no internal overrides.
+.app-card {
+  padding: 1rem;
+  border: 1px solid var(--cds-border-subtle-01);
+  background-color: var(--cds-layer-01);
+  color: var(--cds-text-primary);
+  z-index: var(--rk-z-bar);
+}
+
+.app-card__title {
+  margin-block-end: 0;
+  font-size: 0.875rem;
+}
+
+.cds--btn:hover {
+  outline: 1px solid var(--cds-focus);
+}
+
+.app-card:not(.is-open) {
+  opacity: 0;
+}
