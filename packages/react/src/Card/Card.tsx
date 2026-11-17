@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import { ClickableTile, Tile, Toggletip, ToggletipButton, ToggletipContent } from '@carbon/react';
 import { Information } from '@carbon/icons-react';
 
@@ -27,6 +27,8 @@ export interface CardProps {
   embedded?: boolean;
   /** Makes the whole card a link (ClickableTile). Ignored when embedded. */
   href?: string;
+  /** Element used for the link (default 'a'). Pass a router adapter to navigate client-side. Used only with href. */
+  linkAs?: ElementType;
   className?: string;
   children?: ReactNode;
   /** Built-in strings, English by default. */
@@ -37,7 +39,7 @@ const ICON_SIZE = 16;
 
 // Carbon Tile with an optional header (title, meta, info, action), body and footer.
 // Every part renders only when its prop is set.
-export function Card({ title, meta, info, action, footer, flush = false, bare = false, embedded = false, href, className, children, labels }: CardProps) {
+export function Card({ title, meta, info, action, footer, flush = false, bare = false, embedded = false, href, linkAs = 'a', className, children, labels }: CardProps) {
   const infoLabel = labels?.info ?? DEFAULT_LABELS.info;
   const hasHead = Boolean(title || meta || info || action);
   const Heading = embedded ? 'h3' : 'h2';
@@ -83,8 +85,10 @@ export function Card({ title, meta, info, action, footer, flush = false, bare = 
     return <div className={classes}>{inner}</div>;
   }
   if (href) {
+    // Carbon Link (inside ClickableTile) renders its `as` element with the same classes and href.
+    const linkProps = { as: linkAs };
     return (
-      <ClickableTile className={classes} href={href}>
+      <ClickableTile className={classes} href={href} {...linkProps}>
         {inner}
       </ClickableTile>
     );

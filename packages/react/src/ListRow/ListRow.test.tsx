@@ -1,8 +1,14 @@
+import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ListRow } from './ListRow.js';
 
 const TestLeading = () => <svg data-testid="row-leading" />;
+const TestLink = ({ href, className, children }: { href?: string; className?: string; children?: ReactNode }) => (
+  <a data-testid="test-link" href={href} className={className}>
+    {children}
+  </a>
+);
 
 // ListRow renders li elements, so every test puts it in a ul.
 const inList = (node: React.ReactNode) => <ul>{node}</ul>;
@@ -91,5 +97,29 @@ describe('ListRow', () => {
     );
     expect(screen.getByRole('button', { name: 'Example button row' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Example link row' })).toBeInTheDocument();
+  });
+
+  it('linkAs renders the given element with href and children', () => {
+    render(inList(<ListRow title="Example row" href="#example" linkAs={TestLink} />));
+    const link = screen.getByTestId('test-link');
+    expect(link).toHaveAttribute('href', '#example');
+    expect(link).toHaveClass('rds-list-row__hit');
+    expect(link).toHaveTextContent('Example row');
+  });
+
+  it('without linkAs the href row is a plain anchor', () => {
+    const { container } = render(inList(<ListRow title="Example row" href="#example" />));
+    const link = container.querySelector('a.rds-list-row__hit');
+    expect(link).not.toBeNull();
+    expect(link?.tagName).toBe('A');
+    expect(screen.queryByTestId('test-link')).toBeNull();
+  });
+
+  it('onClick mode ignores linkAs and stays a button', () => {
+    const onClick = vi.fn();
+    render(inList(<ListRow title="Example row" onClick={onClick} linkAs={TestLink} />));
+    expect(screen.queryByTestId('test-link')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Example row' }));
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

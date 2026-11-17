@@ -1,6 +1,13 @@
+import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Card } from './Card.js';
+
+const TestLink = ({ href, className, children }: { href?: string; className?: string; children?: ReactNode }) => (
+  <a data-testid="test-link" href={href} className={className}>
+    {children}
+  </a>
+);
 
 describe('Card', () => {
   it('minimal props: children only, no heading, info button, footer or link', () => {
@@ -73,5 +80,19 @@ describe('Card', () => {
     render(<Card info="Example info text" labels={{ info: 'Example info label' }}>Example body</Card>);
     expect(screen.getByRole('button', { name: 'Example info label' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'More information' })).toBeNull();
+  });
+
+  it('linkAs renders the given element for href with its children', () => {
+    render(<Card title="Example card" href="#example" linkAs={TestLink}>Example body</Card>);
+    const link = screen.getByTestId('test-link');
+    expect(link).toHaveAttribute('href', '#example');
+    expect(link).toHaveTextContent('Example body');
+    expect(link).toHaveClass('rds-card');
+  });
+
+  it('without linkAs the href card is a plain anchor', () => {
+    const { container } = render(<Card title="Example card" href="#example">Example body</Card>);
+    expect(screen.queryByTestId('test-link')).toBeNull();
+    expect(container.querySelector('a.rds-card')?.tagName).toBe('A');
   });
 });
