@@ -1,0 +1,29 @@
+// ChartCard: the chart box has a fixed token height (chart-height-*), so the card does not move when the chart loads.
+@use '../tokens' as *;
+
+.rds-chart-card {
+  &__box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-inline-size: 0;
+    inline-size: 100%;
+
+    &--sm {
+      block-size: $chart-height-sm;
+    }
+
+    &--md {
+      block-size: $chart-height-md;
+    }
+
+    &--lg {
+      block-size: $chart-height-lg;
+    }
+
+    &--lg-sm {
+      block-size: $chart-height-lg-sm;
+    }
+  }
+}

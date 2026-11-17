@@ -1,9 +1,16 @@
 import type { ComponentType } from 'react';
 import { AppShellPage } from './pages/AppShellPage';
 import { CardPage } from './pages/CardPage';
+import { ChartCardPage } from './pages/ChartCardPage';
 import { ChoiceControlPage } from './pages/ChoiceControlPage';
 import { DataTablePage } from './pages/DataTablePage';
 import { FieldPage } from './pages/FieldPage';
+import { LabelValuePage } from './pages/LabelValuePage';
+import { NumCellPage } from './pages/NumCellPage';
+import { ProgressPage } from './pages/ProgressPage';
+import { SettingsGroupPage } from './pages/SettingsGroupPage';
+import { ThumbPage } from './pages/ThumbPage';
+import { TipPage } from './pages/TipPage';
 import { ListRowPage } from './pages/ListRowPage';
 import { PageHeaderPage } from './pages/PageHeaderPage';
 import { StatPage } from './pages/StatPage';
@@ -31,6 +38,13 @@ export const routes: Route[] = [
   { slug: 'data-table', title: 'DataTable', Page: DataTablePage },
   { slug: 'choice-control', title: 'ChoiceControl', Page: ChoiceControlPage },
   { slug: 'field', title: 'Field', Page: FieldPage },
+  { slug: 'label-value', title: 'LabelValue', Page: LabelValuePage },
+  { slug: 'settings-group', title: 'SettingsGroup', Page: SettingsGroupPage },
+  { slug: 'tip', title: 'Tip', Page: TipPage },
+  { slug: 'progress', title: 'Progress', Page: ProgressPage },
+  { slug: 'num-cell', title: 'NumCell', Page: NumCellPage },
+  { slug: 'thumb', title: 'Thumb', Page: ThumbPage },
+  { slug: 'chart-card', title: 'ChartCard', Page: ChartCardPage },
 ];
 
 // Hash routes: #/<slug>. Unknown or empty hash shows the first page.

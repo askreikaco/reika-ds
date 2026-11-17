@@ -1,0 +1,47 @@
+// Thumb: a fixed-width image box. Width comes from size, height from the ratio; the image is cropped to fill it.
+@use '@carbon/styles/scss/spacing' as sp;
+
+.rds-thumb {
+  display: block;
+  flex-shrink: 0;
+  max-inline-size: 100%;
+  object-fit: cover;
+
+  &--sm {
+    inline-size: sp.$spacing-07;
+  }
+
+  &--md {
+    inline-size: sp.$spacing-09;
+  }
+
+  &--lg {
+    inline-size: sp.$spacing-10;
+  }
+
+  &--ratio-1-1 {
+    aspect-ratio: 1 / 1;
+  }
+
+  &--ratio-4-3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  &--ratio-16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  &--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cds-layer-accent-01);
+    fill: var(--cds-icon-secondary);
+    color: var(--cds-icon-secondary);
+  }
+
+  &--empty svg {
+    display: block;
+    fill: currentColor;
+  }
+}
