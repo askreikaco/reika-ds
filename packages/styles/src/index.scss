@@ -2,23 +2,5 @@
 @forward 'tokens';
 @forward 'carbon';
 @forward 'utilities';
-// Global components (packages/react). Component classes are rds-<name>; each file is CSS only.
-@forward 'components/status-tag';
-@forward 'components/state-block';
-@forward 'components/card';
-@forward 'components/stat';
-@forward 'components/list-row';
-@forward 'components/page-header';
-@forward 'components/app-shell';
-@forward 'components/toolbar';
-@forward 'components/sheet';
-@forward 'components/data-table';
-@forward 'components/choice-control';
-@forward 'components/field';
-@forward 'components/label-value';
-@forward 'components/settings-group';
-@forward 'components/tip';
-@forward 'components/progress';
-@forward 'components/num-cell';
-@forward 'components/thumb';
-@forward 'components/chart-card';
+@forward 'component-list';
+// Global components (packages/react): forwarded from _component-list.scss. Component classes are rds-<name>.
