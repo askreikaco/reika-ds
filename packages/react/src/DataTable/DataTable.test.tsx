@@ -55,6 +55,24 @@ describe('DataTable', () => {
     expect(onSelect).toHaveBeenLastCalledWith([]);
   });
 
+  it('batch bar sits inside the table toolbar, above the table body, not over a row', () => {
+    const { container } = render(
+      <DataTable columns={columns} rows={rows} selectable selected={['r2']} onSelect={() => {}} bulkActions={[{ id: 'x', label: 'Example x', onClick: () => {} }]} />,
+    );
+    const bar = container.querySelector('.cds--table-toolbar .cds--batch-actions--active');
+    expect(bar).not.toBeNull();
+    expect(container.querySelector('tbody .cds--batch-actions')).toBeNull();
+  });
+
+  it('phone list rows sit in a ContainedList', () => {
+    setViewport('phone');
+    const { container } = render(
+      <DataTable columns={columns} rows={rows} selectable phoneList={(row) => ({ title: String(row.name) })} />,
+    );
+    expect(container.querySelector('.rds-data-table__list.cds--contained-list')).not.toBeNull();
+    expect(container.querySelectorAll('.rds-data-table__list .rds-list-row')).toHaveLength(3);
+  });
+
   it('bulk actions appear for a selection and receive the selected ids', () => {
     const onClick = vi.fn();
     render(

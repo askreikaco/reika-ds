@@ -168,29 +168,30 @@ export function AppShell({ appName, switcher, headerEnd, nav, more, current, tas
                   href={item.href}
                   className={cx('rds-app-shell__tab', current === item.id && 'rds-app-shell__tab--current')}
                   aria-current={current === item.id ? 'page' : undefined}
+                  title={item.label}
                 >
-                  {item.icon ? <item.icon size={20} aria-hidden="true" className="rds-app-shell__tab-icon" /> : null}
+                  <span className="rds-app-shell__icon-wrap">
+                    {item.icon ? <item.icon size={20} aria-hidden="true" className="rds-app-shell__tab-icon" /> : null}
+                    {item.badge !== undefined ? (
+                      <span className="rds-app-shell__tab-badge">
+                        <Tag size="sm" type="red">
+                          {String(item.badge)}
+                        </Tag>
+                      </span>
+                    ) : null}
+                    {item.dot ? <span className="rds-app-shell__dot" aria-hidden="true" /> : null}
+                    {item.dot ? <span className="rds-app-shell__sr">{L.dot}</span> : null}
+                  </span>
                   <span className="rds-app-shell__tab-label">{item.label}</span>
-                  {item.badge !== undefined ? (
-                    <span className="rds-app-shell__tab-badge">
-                      <Tag size="sm" type="red">
-                        {String(item.badge)}
-                      </Tag>
-                    </span>
-                  ) : null}
-                  {item.dot ? (
-                    <>
-                      <span className="rds-app-shell__dot" aria-hidden="true" />
-                      <span className="rds-app-shell__sr">{L.dot}</span>
-                    </>
-                  ) : null}
                 </a>
               </li>
             ))}
             {more ? (
               <li className="rds-app-shell__tab-item">
-                <a href={more.href} className="rds-app-shell__tab">
-                  <OverflowMenuHorizontal size={20} aria-hidden="true" className="rds-app-shell__tab-icon" />
+                <a href={more.href} className="rds-app-shell__tab" title={more.label}>
+                  <span className="rds-app-shell__icon-wrap">
+                    <OverflowMenuHorizontal size={20} aria-hidden="true" className="rds-app-shell__tab-icon" />
+                  </span>
                   <span className="rds-app-shell__tab-label">{more.label}</span>
                 </a>
               </li>
@@ -204,14 +205,21 @@ export function AppShell({ appName, switcher, headerEnd, nav, more, current, tas
   );
 }
 
+// Icon with the dot anchored to its top-end corner. Carbon calls renderIcon as a component, so the
+// wrapper is a closure over the item.
 function SideItem({ item, current, dotLabel }: { item: AppShellNavItem; current: boolean; dotLabel: string }) {
+  const Icon = item.icon;
+  const renderIcon = Icon
+    ? () => (
+        <span className="rds-app-shell__icon-wrap">
+          <Icon size={16} aria-hidden="true" />
+          {item.dot ? <span className="rds-app-shell__dot" aria-hidden="true" /> : null}
+          {item.dot ? <span className="rds-app-shell__sr">{dotLabel}</span> : null}
+        </span>
+      )
+    : undefined;
   return (
-    <SideNavLink
-      href={item.href}
-      renderIcon={item.icon}
-      isActive={current}
-      aria-current={current ? 'page' : undefined}
-    >
+    <SideNavLink href={item.href} renderIcon={renderIcon} isActive={current} aria-current={current ? 'page' : undefined}>
       {item.label}
       {item.badge !== undefined ? (
         <span className="rds-app-shell__side-badge">
@@ -220,7 +228,7 @@ function SideItem({ item, current, dotLabel }: { item: AppShellNavItem; current:
           </Tag>
         </span>
       ) : null}
-      {item.dot ? (
+      {item.dot && !Icon ? (
         <>
           <span className="rds-app-shell__dot" aria-hidden="true" />
           <span className="rds-app-shell__sr">{dotLabel}</span>

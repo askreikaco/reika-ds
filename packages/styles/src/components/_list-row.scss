@@ -5,6 +5,10 @@
 @use '../tokens' as *;
 
 .rds-list-row {
+  // Row spacing: $spacing-05 at the sides, 48px minimum height (the touch target), for every row.
+  padding-inline: sp.$spacing-05;
+  min-block-size: 3rem;
+
   &__body {
     display: flex;
     align-items: center;
@@ -28,7 +32,7 @@
 
   // Interactive rows: at least the touch height, and a visible focus ring for keyboard users.
   &--interactive {
-    min-block-size: $touch-min;
+    min-block-size: 3rem;
     cursor: pointer;
 
     &:has(:focus-visible) {

@@ -56,6 +56,12 @@ describe('AppShell on phone', () => {
     expect(screen.getByText('Has updates')).toBeInTheDocument();
   });
 
+  it('dot is anchored to the icon wrapper in the bottom tabs', () => {
+    const { container } = render(<AppShell appName="Example app" nav={nav} more={more} current="home">Example content</AppShell>);
+    const tab = container.querySelector('.rds-app-shell__tabbar .rds-app-shell__dot');
+    expect(tab?.parentElement).toHaveClass('rds-app-shell__icon-wrap');
+  });
+
   it('taskMode hides the bottom nav', () => {
     render(<AppShell appName="Example app" nav={nav} more={more} current="home" taskMode>Example content</AppShell>);
     expect(screen.queryByRole('navigation', { name: 'Main navigation' })).toBeNull();
@@ -127,6 +133,13 @@ describe('AppShell on desktop', () => {
     expect(side()).not.toHaveClass('cds--side-nav--expanded');
     fireEvent.click(toggle);
     expect(side()).toHaveClass('cds--side-nav--expanded');
+  });
+
+  it('dot is anchored to the icon wrapper in the side nav', () => {
+    const { container } = render(<AppShell appName="Example app" nav={nav} current="home">Example content</AppShell>);
+    const dot = container.querySelector('.rds-app-shell__sidenav .rds-app-shell__dot');
+    expect(dot?.parentElement).toHaveClass('rds-app-shell__icon-wrap');
+    expect(dot?.parentElement?.querySelector('svg')).not.toBeNull();
   });
 
   it('marks the current side nav item with aria-current', () => {

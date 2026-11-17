@@ -4,15 +4,21 @@ import type { ReactNode } from 'react';
 import { Cell, Section } from './shared';
 
 const nav: AppShellNavItem[] = [
-  { id: 'home', label: 'Example home', href: '#/app-shell', icon: Home, group: 'Work' },
-  { id: 'tasks', label: 'Example tasks', href: '#/app-shell', icon: Task, badge: 4, group: 'Work' },
-  { id: 'docs', label: 'Example docs', href: '#/app-shell', icon: Document, dot: true, group: 'Library' },
-  { id: 'calendar', label: 'Example calendar', href: '#/app-shell', icon: Calendar, group: 'Library' },
-  { id: 'chat', label: 'Example chat', href: '#/app-shell', icon: Chat, badge: 0, group: 'Library' },
-  { id: 'settings', label: 'Example settings', href: '#/app-shell', icon: Settings, group: 'Account' },
+  { id: 'home', label: 'Home', href: '#/app-shell', icon: Home, group: 'Work' },
+  { id: 'tasks', label: 'Tasks', href: '#/app-shell', icon: Task, badge: 4, group: 'Work' },
+  { id: 'docs', label: 'Docs', href: '#/app-shell', icon: Document, dot: true, group: 'Library' },
+  { id: 'calendar', label: 'Calendar', href: '#/app-shell', icon: Calendar, group: 'Library' },
+  { id: 'chat', label: 'Chat', href: '#/app-shell', icon: Chat, badge: 0, group: 'Library' },
+  { id: 'settings', label: 'Settings', href: '#/app-shell', icon: Settings, group: 'Account' },
 ];
 
-const more = { label: 'Example more', href: '#/app-shell' };
+const more = { label: 'More', href: '#/app-shell' };
+
+// One long label: the bottom tab truncates it with an ellipsis, and the full text is in its title attribute.
+const longNav: AppShellNavItem[] = [
+  { id: 'long', label: 'Example very long navigation label', href: '#/app-shell', icon: Home },
+  { id: 'tasks', label: 'Tasks', href: '#/app-shell', icon: Task },
+];
 
 const apps = [
   { id: 'one', label: 'Example one', href: '#/app-shell', current: true },
@@ -31,6 +37,15 @@ export function AppShellPage() {
         <Cell label="four items and More">
           <Frame>
             <AppShell appName="Example app" nav={nav} more={more} current="tasks">
+              <p className="catalog__note">Example content</p>
+            </AppShell>
+          </Frame>
+        </Cell>
+      </Section>
+      <Section title="Phone: long label truncates with an ellipsis (full text in title)">
+        <Cell label="long label">
+          <Frame>
+            <AppShell appName="Example app" nav={longNav} more={more} current="tasks">
               <p className="catalog__note">Example content</p>
             </AppShell>
           </Frame>

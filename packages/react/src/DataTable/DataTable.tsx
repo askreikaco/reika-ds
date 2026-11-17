@@ -13,6 +13,8 @@ import {
   TableRow,
   TableSelectAll,
   TableSelectRow,
+  TableToolbar,
+  ContainedList,
 } from '@carbon/react';
 import { ListRow, type ListRowProps } from '../ListRow/ListRow.js';
 import { StateBlock } from '../StateBlock/StateBlock.js';
@@ -133,9 +135,33 @@ export function DataTable({
 
   const pageSizes = pagination ? [...new Set([...PAGE_SIZES, pagination.pageSize])].sort((a, b) => a - b) : [];
 
+  // Batch bar: a Carbon TableToolbar, so the bar replaces the toolbar strip above the table and never covers rows.
+  const toolbar = selectable ? (
+    <TableToolbar>
+      <TableBatchActions
+        shouldShowBatchActions={selectedCount > 0}
+        totalSelected={selectedCount}
+        onCancel={() => onSelect?.([])}
+        translateWithId={(id, options) => {
+          if (id === 'carbon.table.batch.cancel') return L.clearSelection;
+          if (id === 'carbon.table.batch.selectAll') return L.selectAll;
+          return L.selectedCount(options?.totalSelected ?? selectedCount);
+        }}
+      >
+        {(bulkActions ?? []).map((action) => (
+          <TableBatchAction key={action.id} onClick={() => action.onClick(selected)}>
+            {action.label}
+          </TableBatchAction>
+        ))}
+      </TableBatchActions>
+    </TableToolbar>
+  ) : null;
+
   const body =
     phoneList && phone ? (
-      <ul className="rds-data-table__list">
+      <>
+        {toolbar}
+        <ContainedList className="rds-data-table__list">
         {rows.map((row) => {
           const props = phoneList(row);
           const check = selectable ? (
@@ -149,9 +175,11 @@ export function DataTable({
           ) : null;
           return <ListRow key={row.id} {...props} leading={check ?? props.leading} />;
         })}
-      </ul>
+        </ContainedList>
+      </>
     ) : (
       <TableContainer className="rds-data-table__scroll">
+        {toolbar}
         <Table size={size} className="rds-data-table__table">
           <TableHead>
             <TableRow>
@@ -208,25 +236,6 @@ export function DataTable({
 
   return (
     <div className={`rds-data-table rds-data-table--${size}`}>
-      {selectable ? (
-        <TableBatchActions
-          shouldShowBatchActions={selectedCount > 0}
-          totalSelected={selectedCount}
-          onCancel={() => onSelect?.([])}
-          translateWithId={(id, options) => {
-            if (id === 'carbon.table.batch.cancel') return L.clearSelection;
-            if (id === 'carbon.table.batch.selectAll') return L.selectAll;
-            return L.selectedCount(options?.totalSelected ?? selectedCount);
-          }}
-        >
-          {(bulkActions ?? []).map((action) => (
-            <TableBatchAction key={action.id} onClick={() => action.onClick(selected)}>
-              {action.label}
-            </TableBatchAction>
-          ))}
-        </TableBatchActions>
-      ) : null}
-
       {body}
 
       {pagination ? (
