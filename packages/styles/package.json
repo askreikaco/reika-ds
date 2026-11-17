@@ -29,7 +29,7 @@
     "lint:consumer": "node scripts/lint-consumer.mjs"
   },
   "dependencies": {
-    "@carbon/styles": "1.117.0",
+    "@carbon/styles": "1.119.0",
     "@reika-ds/tokens": "0.1.3",
     "sass": "1.105.2"
   },
