@@ -1,0 +1,52 @@
+// StateBlock: empty, locked and not-found tiles; loading skeleton; error notice with actions.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+
+.rds-state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: sp.$spacing-03;
+  min-inline-size: 0;
+
+  &--empty,
+  &--locked,
+  &--notFound {
+    padding: sp.$spacing-06 sp.$spacing-05;
+    text-align: start;
+    align-items: flex-start;
+  }
+
+  &--error,
+  &--loading {
+    align-items: stretch;
+  }
+
+  // A skeleton needs a width to read as a placeholder when the block sits in a shrink-to-fit container.
+  &--loading {
+    min-inline-size: 16rem;
+  }
+
+  &__icon {
+    fill: var(--cds-icon-secondary);
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--cds-text-primary);
+    @include type.type-style('heading-compact-01');
+  }
+
+  &__message {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    overflow-wrap: anywhere;
+    @include type.type-style('body-compact-01');
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: sp.$spacing-03;
+  }
+}

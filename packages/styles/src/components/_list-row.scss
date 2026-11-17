@@ -1,0 +1,99 @@
+// ListRow: one row in a ContainedList. Carbon sets the row padding and minimum height (touch target);
+// this file lays out the content inside it and adds the focus ring for links.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+@use '../tokens' as *;
+
+.rds-list-row {
+  &__body {
+    display: flex;
+    align-items: center;
+    gap: sp.$spacing-04;
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: inherit;
+  }
+
+  &__hit {
+    display: flex;
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &--compact &__body {
+    gap: sp.$spacing-02;
+  }
+
+  // Interactive rows: at least the touch height, and a visible focus ring for keyboard users.
+  &--interactive {
+    min-block-size: $touch-min;
+    cursor: pointer;
+
+    &:has(:focus-visible) {
+      outline: $focus-ring-outer solid var(--cds-focus);
+      outline-offset: -$focus-ring-outer;
+    }
+  }
+
+  &__leading {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  &__main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: sp.$spacing-01;
+    min-inline-size: 0;
+  }
+
+  &__title {
+    color: var(--cds-text-primary);
+    overflow-wrap: anywhere;
+    @include type.type-style('body-compact-01');
+  }
+
+  &--muted &__title {
+    color: var(--cds-text-secondary);
+  }
+
+  &__meta {
+    color: var(--cds-text-secondary);
+    overflow-wrap: anywhere;
+    @include type.type-style('label-01');
+  }
+
+  &__badge,
+  &__end {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    fill: var(--cds-icon-secondary);
+  }
+
+  &__error-icon {
+    flex-shrink: 0;
+    fill: var(--cds-support-error);
+  }
+
+  &--error &__title {
+    color: var(--cds-support-error);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+
+    .rds-list-row__title,
+    .rds-list-row__meta {
+      color: var(--cds-text-disabled);
+    }
+  }
+}

@@ -2,3 +2,10 @@
 @forward 'tokens';
 @forward 'carbon';
 @forward 'utilities';
+// Global components (packages/react). Component classes are rds-<name>; each file is CSS only.
+@forward 'components/status-tag';
+@forward 'components/state-block';
+@forward 'components/card';
+@forward 'components/stat';
+@forward 'components/list-row';
+@forward 'components/page-header';
