@@ -1,0 +1,11 @@
+{
+  "name": "@reika-ds/react",
+  "version": "0.0.0",
+  "private": false,
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@carbon/react": "1.118.0"
+  }
+}

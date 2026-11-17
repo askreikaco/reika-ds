@@ -3,4 +3,17 @@ REIKA design system. Built on IBM Carbon (npm dependency, not a fork): tokens, s
 
 Status: setting up. Plan: packages/tokens, packages/styles, packages/react, packages/web, apps/catalog.
 
+## Development
+
+```sh
+npm ci
+npm test
+npm run build
+npm run dev -w apps/catalog
+```
+
+## Contributing
+
+PRs need green CI before merge.
+
 License: Apache-2.0. REIKA names and logos are trademarks and are not covered by the license.
