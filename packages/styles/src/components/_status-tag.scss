@@ -1,0 +1,30 @@
+// StatusTag: Carbon Tag with an icon slot, a count slot and max width. Tone colours come from Carbon Tag types.
+@use '@carbon/styles/scss/spacing' as sp;
+
+.rds-status-tag {
+  max-inline-size: 100%;
+
+  &__icon {
+    display: inline-block;
+    flex-shrink: 0;
+    margin-inline-end: sp.$spacing-01;
+    vertical-align: middle;
+    fill: currentColor;
+
+    svg {
+      display: block;
+    }
+  }
+
+  &__count {
+    margin-inline-start: sp.$spacing-02;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Dismissible tags: the icon sits in a wrapper next to the Carbon dismissible tag.
+  &--dismissible {
+    display: inline-flex;
+    align-items: center;
+    max-inline-size: 100%;
+  }
+}

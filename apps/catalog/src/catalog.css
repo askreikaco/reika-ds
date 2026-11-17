@@ -1,0 +1,112 @@
+/* Catalog chrome only. Components are styled by @reika-ds/styles and Carbon. */
+body {
+  margin: 0;
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.catalog {
+  min-block-size: 100vh;
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
+  box-sizing: border-box;
+  padding: 0 1rem 2rem;
+  max-inline-size: 100%;
+  overflow-x: hidden;
+}
+
+.catalog__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+
+.catalog__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.catalog__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding-block-end: 1rem;
+  border-block-end: 1px solid var(--cds-border-subtle);
+}
+
+.catalog__link {
+  min-block-size: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--cds-link-primary);
+}
+
+.catalog__link[aria-current='page'] {
+  color: var(--cds-text-primary);
+  text-decoration: underline;
+}
+
+.catalog__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-block-start: 1.5rem;
+  min-inline-size: 0;
+}
+
+.catalog__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.catalog__section-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--cds-text-secondary);
+}
+
+.catalog__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.catalog__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.catalog__cell-label {
+  font-size: 0.75rem;
+  color: var(--cds-text-secondary);
+}
+
+.catalog__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  background: var(--cds-layer-accent-01);
+  color: var(--cds-text-primary);
+  font-size: 0.75rem;
+}
+
+.catalog__note {
+  margin: 0;
+  color: var(--cds-text-secondary);
+  font-size: 0.875rem;
+}

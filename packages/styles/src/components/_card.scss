@@ -1,0 +1,82 @@
+// Card: Carbon Tile with a header row (title, meta, info, action), body and footer.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+@use '../tokens' as *;
+
+.rds-card {
+  display: flex;
+  flex-direction: column;
+  gap: $card-gap;
+  min-inline-size: 0;
+  padding: $card-pad-block $card-pad-inline;
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: sp.$spacing-03;
+    min-inline-size: 0;
+  }
+
+  &__title {
+    margin: 0;
+    min-inline-size: 0;
+    color: var(--cds-text-primary);
+    overflow-wrap: anywhere;
+    @include type.type-style('heading-compact-02');
+  }
+
+  &__tools {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: sp.$spacing-03;
+    margin-inline-start: auto;
+  }
+
+  &__meta {
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+  }
+
+  &__body {
+    min-inline-size: 0;
+  }
+
+  &__footer {
+    padding-block-start: sp.$spacing-03;
+    border-block-start: $focus-ring-inner solid var(--cds-border-subtle);
+    color: var(--cds-text-secondary);
+    @include type.type-style('label-01');
+  }
+
+  &--flush &__body {
+    margin-inline: 0;
+  }
+
+  &--flush {
+    padding-inline: 0;
+
+    .rds-card__head,
+    .rds-card__footer {
+      padding-inline: $card-pad-inline;
+    }
+  }
+
+  // bare: children set their own spacing (charts, maps). No padding anywhere on the card.
+  &--bare {
+    padding: 0;
+    gap: 0;
+  }
+
+  // embedded: no tile of its own; sits inside another card.
+  &--embedded {
+    padding: 0;
+    background: transparent;
+  }
+}

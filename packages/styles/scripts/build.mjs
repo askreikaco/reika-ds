@@ -42,6 +42,11 @@ export async function build() {
       await copyFile(join(src, name), join(dist, 'scss', name));
     }
   }
+  // Component partials (src/components/_<name>.scss) keep their folder: index.scss forwards components/<name>.
+  await mkdir(join(dist, 'scss', 'components'), { recursive: true });
+  for (const name of await readdir(join(src, 'components'))) {
+    if (name.endsWith('.scss')) await copyFile(join(src, 'components', name), join(dist, 'scss', 'components', name));
+  }
   return { expanded, compressed };
 }
 

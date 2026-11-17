@@ -1,0 +1,74 @@
+// PageHeader: breadcrumb, back link, title (h1 or h2), subtitle, meta and actions.
+@use '@carbon/styles/scss/spacing' as sp;
+@use '@carbon/styles/scss/type' as type;
+@use '@carbon/styles/scss/breakpoint' as bp;
+
+.rds-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: sp.$spacing-03;
+  min-inline-size: 0;
+  margin-block-end: sp.$spacing-05;
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: sp.$spacing-05;
+  }
+
+  &__main {
+    display: flex;
+    flex: 1 1 20rem;
+    flex-direction: column;
+    gap: sp.$spacing-02;
+    min-inline-size: 0;
+  }
+
+  // Ghost button text sits inside its own padding: pull the button back so its label lines up with the title.
+  &__back {
+    align-self: flex-start;
+    margin-inline-start: -#{sp.$spacing-05};
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--cds-text-primary);
+    overflow-wrap: anywhere;
+
+    &--1 {
+      @include type.type-style('heading-05');
+
+      @include bp.breakpoint-down(md) {
+        @include type.type-style('heading-04');
+      }
+    }
+
+    &--2 {
+      @include type.type-style('heading-04');
+    }
+  }
+
+  &__subtitle,
+  &__meta {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  &__subtitle {
+    @include type.type-style('body-compact-01');
+  }
+
+  &__meta {
+    @include type.type-style('label-01');
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: sp.$spacing-03;
+  }
+}
