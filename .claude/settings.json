@@ -2,7 +2,9 @@
   "permissions": {
     "deny": [
       "mcp__claude-code-remote__archive_session",
-      "mcp__claude-code-remote__interrupt_session",
+      "mcp__claude-code-remote__interrupt_session"
+    ],
+    "ask": [
       "mcp__claude-code-remote__create_session"
     ]
   }
