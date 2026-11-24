@@ -14,8 +14,17 @@ describe('parity: dist equals the reika-app values in the fixture', () => {
 
   it('every fixture reika value equals dist (including density options)', () => {
     for (const [key, value] of Object.entries(fixture.reika)) {
-      expect(d.reika[key], `reika.${key}`).toEqual(value);
+      // z-layers: every app layer keeps its value; REIKA may add layers between them (sticky, pop, modal).
+      if (key === 'z-layers') expect(d.reika[key], `reika.${key}`).toMatchObject(value as object);
+      else expect(d.reika[key], `reika.${key}`).toEqual(value);
     }
+  });
+
+  it('added z-layers keep the app order: raised < sticky < bar < shell < pop < modal < toast', () => {
+    const z = d.reika['z-layers'] as Record<string, number>;
+    const order = ['raised', 'sticky', 'bar', 'shell', 'pop', 'modal', 'toast'];
+    expect(Object.keys(z).sort()).toEqual([...order].sort());
+    for (let i = 1; i < order.length; i++) expect(z[order[i]], order[i]).toBeGreaterThan(z[order[i - 1]]);
   });
 
   it('chart palette equals dist (light and dark)', () => {
@@ -37,9 +46,9 @@ describe('parity: dist equals the reika-app values in the fixture', () => {
     expect(cssBlock(css, '[data-theme="dark"] {')['rk-tag-background-green']).toBe('#044317');
   });
 
-  it('every dist reika key not in the fixture is workforce-sourced in _sources', () => {
+  it('every dist reika key not in the fixture is app-sourced (workforce or giapha) in _sources', () => {
     const unchecked = Object.keys(d.reika).filter((k) => !(k in fixture.reika));
     expect(unchecked.sort()).toEqual(Object.keys(d.sources).sort());
-    for (const key of unchecked) expect(d.sources[key], `sources.${key}`).toMatch(/^workforce /);
+    for (const key of unchecked) expect(d.sources[key], `sources.${key}`).toMatch(/^(workforce|giapha) /);
   });
 });
