@@ -11,6 +11,8 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const defaultDir = join(root, 'dist');
 const carbonThemes = require('@carbon/themes');
 const carbonColors = require('@carbon/colors');
+const carbonType = require('@carbon/type');
+const carbonMotion = require('@carbon/motion');
 
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -55,6 +57,38 @@ function reikaEntries(reika) {
   return entries;
 }
 
+// Type scale: each REIKA step names a Carbon type style; size, line height (rounded to 1px = 0.0625rem) and letter
+// spacing are read from @carbon/type, never copied.
+function typeScale(map) {
+  const out = {};
+  for (const step of Object.keys(map)) {
+    const style = carbonType[map[step]];
+    if (!style || typeof style.fontSize !== 'string' || !style.fontSize.endsWith('rem')) {
+      throw new Error(`build: @carbon/type has no rem style "${map[step]}" for ${step}`);
+    }
+    const size = parseFloat(style.fontSize);
+    const lh = Math.round(size * Number(style.lineHeight) * 16) / 16;
+    const ls = style.letterSpacing === 0 || style.letterSpacing === undefined ? '0' : String(style.letterSpacing);
+    out[step] = { carbon: map[step], fontSize: style.fontSize, lineHeight: `${lh}rem`, letterSpacing: ls };
+  }
+  return out;
+}
+
+// Motion: durations and easings by Carbon key (@carbon/motion), never copied.
+function motionTokens(map) {
+  const out = {};
+  for (const [name, key] of Object.entries(map.duration)) {
+    if (typeof carbonMotion[key] !== 'string') throw new Error(`build: @carbon/motion has no duration ${key}`);
+    out[name] = carbonMotion[key];
+  }
+  for (const [name, [kind, mode]] of Object.entries(map.easing)) {
+    const v = carbonMotion.easings?.[kind]?.[mode];
+    if (typeof v !== 'string') throw new Error(`build: @carbon/motion has no easing ${kind}.${mode}`);
+    out[name] = v;
+  }
+  return out;
+}
+
 export function buildOutputs(src) {
   if (src.version !== 1) throw new Error('build: src version must be 1');
   const names = src.carbon.themes; // { light: 'g10', dark: 'g100' }
@@ -82,8 +116,16 @@ export function buildOutputs(src) {
     reika: Object.fromEntries(Object.keys(src.reika).sort().map((k) => [k, src.reika[k]])),
     chart: { light: src.chart.light, dark: src.chart.dark },
     palette,
+    type: typeScale(src['carbon-type']),
+    motion: motionTokens(src['carbon-motion']),
     sources: src._sources,
   };
+  // fs-N / lh-N / ls-N per type step, then the motion names.
+  const typeLines = Object.entries(resolved.type).flatMap(([step, t]) => {
+    const n = step.slice(3);
+    return [[`fs-${n}`, t.fontSize], [`lh-${n}`, t.lineHeight], [`ls-${n}`, t.letterSpacing]];
+  });
+  const motionLines = Object.entries(resolved.motion);
   const entries = reikaEntries(src.reika);
   const chartLines = (theme) => src.chart[theme].map((c, i) => `--rk-chart-${i + 1}: ${c};`);
 
@@ -100,6 +142,9 @@ export function buildOutputs(src) {
   for (const [name, value] of entries) {
     if (!name.startsWith('z-')) scss.push(`$${name}: ${reikaValue(name, value)};`);
   }
+  scss.push('');
+  scss.push('// Type scale and motion, resolved from @carbon/type and @carbon/motion.');
+  for (const [name, value] of [...typeLines, ...motionLines]) scss.push(`$${name}: ${value};`);
   scss.push('');
   scss.push('$z-layers: (');
   for (const layer of Object.keys(src.reika['z-layers'])) scss.push(`  ${layer}: ${src.reika['z-layers'][layer]},`);
@@ -120,7 +165,8 @@ export function buildOutputs(src) {
   const cdsLines = (tokens) => Object.keys(tokens).map((k) => `--cds-${k}: ${tokens[k]};`);
   const rkLines = entries.map(([name, value]) => `--rk-${name}: ${reikaValue(name, value)};`);
   const paletteLines = (theme) => Object.keys(palette[theme]).map((n) => `--rk-${n}: ${palette[theme][n]};`);
-  const lightBlock = [...cdsLines(light.tokens), ...rkLines, ...chartLines('light'), ...paletteLines('light')];
+  const scaleLines = [...typeLines, ...motionLines].map(([name, value]) => `--rk-${name}: ${value};`);
+  const lightBlock = [...cdsLines(light.tokens), ...rkLines, ...scaleLines, ...chartLines('light'), ...paletteLines('light')];
   const darkBlock = [...cdsLines(dark.tokens), ...chartLines('dark'), ...paletteLines('dark')];
   const indent = (lines, pad = '  ') => lines.map((l) => `${pad}${l}`).join('\n');
   const cssText = [

@@ -32,7 +32,7 @@ const EXPECTED_GENERATED = new Set<string>([
   ...['primary', 'secondary', 'helper', 'error', 'on-color', 'disabled', 'inverse', 'placeholder'].map((t) => `rk-text-${t}`),
   ...['background', 'layer-01', 'layer-02', 'field-01', 'inverse'].map((t) => `rk-bg-${t}`),
   ...['border-subtle-01', 'border-strong-01', 'border-interactive'].map((t) => `rk-${t}`),
-  ...['raised', 'bar', 'shell', 'toast'].map((z) => `rk-z-${z}`),
+  ...['raised', 'sticky', 'bar', 'shell', 'pop', 'modal', 'toast'].map((z) => `rk-z-${z}`),
   ...['md', 'lg'].flatMap((b) => [`rk-hide-${b}-up`, `rk-hide-${b}-down`]),
   'rk-measure-form',
   'rk-measure-text',

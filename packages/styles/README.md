@@ -91,9 +91,9 @@ Generated from `dist/reika-ds.css` by `node scripts/readme-classes.mjs` (checked
 
 `rk-border-subtle-01`, `rk-border-strong-01`, `rk-border-interactive`
 
-**Stacking (REIKA z-layers)** (4)
+**Stacking (REIKA z-layers)** (7)
 
-`rk-z-raised`, `rk-z-bar`, `rk-z-shell`, `rk-z-toast`
+`rk-z-raised`, `rk-z-sticky`, `rk-z-bar`, `rk-z-shell`, `rk-z-pop`, `rk-z-modal`, `rk-z-toast`
 
 **Show/hide at Carbon breakpoints** (4)
 
@@ -111,5 +111,5 @@ Generated from `dist/reika-ds.css` by `node scripts/readme-classes.mjs` (checked
 
 `rk-measure-form`, `rk-measure-text`
 
-Total: 193 classes.
+Total: 196 classes.
 <!-- classes:end -->
