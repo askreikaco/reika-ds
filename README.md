@@ -3,6 +3,8 @@ REIKA design system. Built on IBM Carbon (npm dependency, not a fork): tokens, s
 
 Status: setting up. Plan: packages/tokens, packages/styles, packages/react, packages/web, apps/catalog.
 
+`packages/web`: HTML-string helpers + CSS for apps without React (list item, section, toolbar, tag, icon button, menu, sheet, timeline item, empty state). See packages/web/README.md.
+
 ## Install
 
 No registry account or token needed. Install from the GitHub release tarballs (v0.1.3):
