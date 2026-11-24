@@ -13,6 +13,7 @@ const carbonThemes = require('@carbon/themes');
 const carbonColors = require('@carbon/colors');
 const carbonType = require('@carbon/type');
 const carbonMotion = require('@carbon/motion');
+const carbonLayout = require('@carbon/layout');
 
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -89,6 +90,18 @@ function motionTokens(map) {
   return out;
 }
 
+// Spacing scale: sp-01..sp-13 read from @carbon/layout (spacing01..spacing13), never copied.
+function spacingTokens(steps) {
+  const out = {};
+  for (const n of steps) {
+    const key = `spacing${n}`;
+    const v = carbonLayout[key];
+    if (typeof v !== 'string' || !v.endsWith('rem')) throw new Error(`build: @carbon/layout has no rem ${key}`);
+    out[`sp-${n}`] = v;
+  }
+  return out;
+}
+
 export function buildOutputs(src) {
   if (src.version !== 1) throw new Error('build: src version must be 1');
   const names = src.carbon.themes; // { light: 'g10', dark: 'g100' }
@@ -118,6 +131,7 @@ export function buildOutputs(src) {
     palette,
     type: typeScale(src['carbon-type']),
     motion: motionTokens(src['carbon-motion']),
+    spacing: spacingTokens(src['carbon-spacing']),
     sources: src._sources,
   };
   // fs-N / lh-N / ls-N per type step, then the motion names.
@@ -126,6 +140,7 @@ export function buildOutputs(src) {
     return [[`fs-${n}`, t.fontSize], [`lh-${n}`, t.lineHeight], [`ls-${n}`, t.letterSpacing]];
   });
   const motionLines = Object.entries(resolved.motion);
+  const spacingLines = Object.entries(resolved.spacing);
   const entries = reikaEntries(src.reika);
   const chartLines = (theme) => src.chart[theme].map((c, i) => `--rk-chart-${i + 1}: ${c};`);
 
@@ -143,8 +158,8 @@ export function buildOutputs(src) {
     if (!name.startsWith('z-')) scss.push(`$${name}: ${reikaValue(name, value)};`);
   }
   scss.push('');
-  scss.push('// Type scale and motion, resolved from @carbon/type and @carbon/motion.');
-  for (const [name, value] of [...typeLines, ...motionLines]) scss.push(`$${name}: ${value};`);
+  scss.push('// Type scale, motion and spacing, resolved from @carbon/type, @carbon/motion and @carbon/layout.');
+  for (const [name, value] of [...typeLines, ...motionLines, ...spacingLines]) scss.push(`$${name}: ${value};`);
   scss.push('');
   scss.push('$z-layers: (');
   for (const layer of Object.keys(src.reika['z-layers'])) scss.push(`  ${layer}: ${src.reika['z-layers'][layer]},`);
@@ -165,7 +180,7 @@ export function buildOutputs(src) {
   const cdsLines = (tokens) => Object.keys(tokens).map((k) => `--cds-${k}: ${tokens[k]};`);
   const rkLines = entries.map(([name, value]) => `--rk-${name}: ${reikaValue(name, value)};`);
   const paletteLines = (theme) => Object.keys(palette[theme]).map((n) => `--rk-${n}: ${palette[theme][n]};`);
-  const scaleLines = [...typeLines, ...motionLines].map(([name, value]) => `--rk-${name}: ${value};`);
+  const scaleLines = [...typeLines, ...motionLines, ...spacingLines].map(([name, value]) => `--rk-${name}: ${value};`);
   const lightBlock = [...cdsLines(light.tokens), ...rkLines, ...scaleLines, ...chartLines('light'), ...paletteLines('light')];
   const darkBlock = [...cdsLines(dark.tokens), ...chartLines('dark'), ...paletteLines('dark')];
   const indent = (lines, pad = '  ') => lines.map((l) => `${pad}${l}`).join('\n');

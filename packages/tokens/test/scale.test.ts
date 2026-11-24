@@ -1,5 +1,6 @@
 import * as carbonType from '@carbon/type';
 import * as carbonMotion from '@carbon/motion';
+import * as carbonLayout from '@carbon/layout';
 import { describe, expect, it } from 'vitest';
 import { cssBlock, dist, distTokens } from './helpers';
 
@@ -14,6 +15,7 @@ describe('type scale and motion come from Carbon by key', () => {
   const d = distTokens() as unknown as {
     type: Record<string, { carbon: string; fontSize: string; lineHeight: string; letterSpacing: string }>;
     motion: Record<string, string>;
+    spacing: Record<string, string>;
   };
 
   it('six steps, sizes ascending, each equal to its @carbon/type style', () => {
@@ -52,5 +54,18 @@ describe('type scale and motion come from Carbon by key', () => {
     expect(d.motion['ease-entrance']).toBe(motion.easings.entrance.productive);
     expect(d.motion['ease-exit']).toBe(motion.easings.exit.productive);
     for (const [name, value] of Object.entries(d.motion)) expect(root[`rk-${name}`], name).toBe(value);
+  });
+
+  it('spacing sp-01..sp-13 equals @carbon/layout spacing01..13, ascending', () => {
+    const layout = carbonLayout as unknown as Record<string, string>;
+    const steps = Object.keys(d.spacing);
+    expect(steps).toEqual(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'].map((n) => `sp-${n}`));
+    let prev = 0;
+    for (const step of steps) {
+      expect(d.spacing[step], step).toBe(layout[`spacing${step.slice(3)}`]);
+      expect(root[`rk-${step}`], step).toBe(d.spacing[step]);
+      expect(parseFloat(d.spacing[step])).toBeGreaterThan(prev);
+      prev = parseFloat(d.spacing[step]);
+    }
   });
 });

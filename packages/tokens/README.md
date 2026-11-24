@@ -35,6 +35,7 @@ All are `--rk-*` custom properties in `tokens.css` (and `$` variables in `_token
 | `--rk-lh-1` … `--rk-lh-6` | 1 · 1.25 · 1.5 · 1.75 · 2.25 · 3.125rem | Line height paired with the same step. |
 | `--rk-ls-1` … `--rk-ls-6` | 0.32px · 0.16px · 0 … | Letter spacing of the step (labels, body). |
 | `--rk-dur-fast` / `-moderate` / `-slow` | 110 / 150 / 240ms (Carbon fast-02, moderate-01, moderate-02) | Transitions: hover/press, menus and toasts, sheets. |
+| `--rk-sp-01` … `--rk-sp-13` | 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 160px (Carbon spacing-01…13) | Gaps and padding in non-React CSS (packages/web): no raw spacing values. |
 | `--rk-ease-standard` / `-entrance` / `-exit` | Carbon productive curves | Matching easing for the durations. |
 | `--rk-tile`, `--rk-tile-sm` | 2.5rem, 2rem | Avatar/surname tile in list rows; compact rows and pickers. |
 | `--rk-tile-1` … `--rk-tile-8` | Carbon purple70/60, green60/60, blue70/60, orange70/60, teal70/60, magenta70/60, cyan70/60, red70/60 | Categorical fill for surname or family tiles (white text on top). Tested: text ≥ 4.5:1 on every tile, tile ≥ 3:1 against background and layer-01 in both themes. |
