@@ -49,26 +49,44 @@ export function tag(text, o = {}) {
 // listItem: one item in a list. Variants: row | card | compact | tree | table-row.
 // One link per item (the whole item) plus at most one trailing action; never nested interactive elements.
 // ---------------------------------------------------------------------------------------------------------------
-const VARIANTS = ['row', 'card', 'compact', 'tree', 'table-row'];
+const VARIANTS = ['row', 'card', 'compact', 'tree', 'table-row', 'ghost'];
+/** Attributes for an element that also has a class: an object goes through attrs(); a string is raw, caller-trusted markup. */
+function tagAttrs(base, extra) {
+  if (typeof extra === 'string') return `${attrs(base)} ${extra.trim()}`.trimEnd();
+  return attrs({ ...base, ...(extra || {}) });
+}
+
 /**
  * @param {{ title: string|object, href?: string, meta?: any, leading?: object, badges?: any, trailing?: any,
  *   action?: object|null, variant?: string, depth?: number, muted?: boolean, current?: boolean,
  *   show?: { leading?: boolean, meta?: boolean, badges?: boolean, trailing?: boolean, chevron?: boolean },
- *   cells?: any[], attrs?: object, linkAttrs?: object }} o
+ *   cells?: any[], attrs?: object|string, linkAttrs?: object, chevron?: boolean, density?: 'dense',
+ *   tone?: 'danger' }} o
  *  action: an iconButton() options object (rendered as a sibling of the link) or raw() markup.
+ *  attrs: an object (escaped) or a string (raw markup, trusted by the caller, e.g. 'data-rvx aria-expanded="false"').
+ *  chevron: true shows the chevron even without href (a row that opens a sheet or menu).
+ *  density: 'dense' tightens the padding. tone: 'danger' colours the title. variant 'ghost': accent text, no divider.
  */
 export function listItem(o) {
   const variant = VARIANTS.includes(o.variant) ? o.variant : 'row';
   const show = { leading: true, meta: true, badges: true, trailing: true, chevron: undefined, ...(o.show || {}) };
   const action = o.action ? (isRaw(o.action) ? content(o.action) : iconButton({ ...o.action, cls: cx('rds-item__action', o.action.cls) })) : '';
-  const chevron = show.chevron === undefined ? Boolean(o.href) && !action : show.chevron && Boolean(o.href);
+  const chevron = o.chevron === true
+    ? show.chevron !== false
+    : show.chevron === undefined ? Boolean(o.href) && !action : show.chevron && Boolean(o.href);
   const depth = Math.max(0, Math.min(12, Number(o.depth) || 0));
-  const cls = cx('rds-item', `rds-item--${variant}`, { 'rds-item--muted': o.muted, 'rds-item--action': action, [`rds-item--d${depth}`]: variant === 'tree' });
+  const cls = cx('rds-item', `rds-item--${variant}`, {
+    'rds-item--muted': o.muted,
+    'rds-item--action': action,
+    'rds-item--dense': o.density === 'dense',
+    'rds-item--danger': o.tone === 'danger',
+    [`rds-item--d${depth}`]: variant === 'tree',
+  });
 
   if (variant === 'table-row') {
     const cells = (o.cells || []).map((c) => `<td class="rds-item__cell">${content(c)}</td>`).join('');
     const title = o.href ? `<a${attrs({ class: 'rds-item__hit', href: safeHref(o.href), ...(o.linkAttrs || {}) })}>${content(o.title)}</a>` : content(o.title);
-    return `<tr${attrs({ class: cls, ...(o.attrs || {}) })}><th scope="row" class="rds-item__cell rds-item__cell--title">${title}</th>${cells}${action ? `<td class="rds-item__cell rds-item__cell--action">${action}</td>` : ''}</tr>`;
+    return `<tr${tagAttrs({ class: cls }, o.attrs)}><th scope="row" class="rds-item__cell rds-item__cell--title">${title}</th>${cells}${action ? `<td class="rds-item__cell rds-item__cell--action">${action}</td>` : ''}</tr>`;
   }
 
   const body = [
@@ -82,7 +100,7 @@ export function listItem(o) {
   const hit = o.href
     ? `<a${attrs({ class: 'rds-item__hit', href: safeHref(o.href), 'aria-current': o.current ? 'page' : undefined, ...(o.linkAttrs || {}) })}>${body}</a>`
     : `<div class="rds-item__hit rds-item__hit--static">${body}</div>`;
-  return `<li${attrs({ class: cls, ...(o.attrs || {}) })}>${hit}${action}</li>`;
+  return `<li${tagAttrs({ class: cls }, o.attrs)}>${hit}${action}</li>`;
 }
 
 /** List wrapper for listItem(): <ul> for row/card/compact/tree, <table> for table-row (with optional head). */
@@ -142,31 +160,39 @@ export function toolbar(o = {}) {
 // ---------------------------------------------------------------------------------------------------------------
 /**
  * @param {{ id: string, label?: string, items: Array<{ label: string, value?: string, href?: string,
- *   tone?: 'default'|'danger', disabled?: boolean }> }} o
+ *   tone?: 'default'|'danger', disabled?: boolean, attrs?: object, divider?: boolean }> }} o
+ *   attrs: escaped attributes on the row (e.g. data-act). divider: a separator line before the row.
  */
 export function menu(o) {
   if (!o.id) throw new Error('rds: menu needs an id (the trigger points at it with aria-controls)');
   const head = has(o.label) ? `<p class="rds-menu__label" aria-hidden="true">${esc(o.label)}</p>` : '';
-  const items = o.items
+  return `<div${attrs({ class: 'rds-menu', id: o.id, role: 'menu', 'aria-label': o.label, hidden: true })}>${head}${menuItems(o.items)}</div>`;
+}
+
+/** Menu rows for menu() and openMenu(): label escaped, attrs escaped, tone danger, divider = separator before the row. */
+export function menuItems(items) {
+  return items
     .map((it) => {
+      const sep = it.divider ? '<div class="rds-menu__sep" role="separator"></div>' : '';
       const cls = cx('rds-menu__item', { 'rds-menu__item--danger': it.tone === 'danger' });
-      if (it.href) return `<a${attrs({ class: cls, role: 'menuitem', href: safeHref(it.href), tabindex: '-1' })}>${esc(it.label)}</a>`;
-      return `<button${attrs({ type: 'button', class: cls, role: 'menuitem', 'data-value': it.value, disabled: Boolean(it.disabled), tabindex: '-1' })}>${esc(it.label)}</button>`;
+      const extra = it.attrs || {};
+      if (it.href) return `${sep}<a${attrs({ class: cls, role: 'menuitem', href: safeHref(it.href), tabindex: '-1', ...extra })}>${esc(it.label)}</a>`;
+      return `${sep}<button${attrs({ type: 'button', class: cls, role: 'menuitem', 'data-value': it.value, disabled: Boolean(it.disabled), tabindex: '-1', ...extra })}>${esc(it.label)}</button>`;
     })
     .join('');
-  return `<div${attrs({ class: 'rds-menu', id: o.id, role: 'menu', 'aria-label': o.label, hidden: true })}>${head}${items}</div>`;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
 // sheet / confirm: native <dialog> as a bottom sheet; full width on phones, capped and centred when wide (fluid).
 // ---------------------------------------------------------------------------------------------------------------
 /**
- * @param {{ id: string, title: string, body: any, actions?: any, closeLabel?: string, attrs?: object }} o
+ * @param {{ id: string, title: string, body: any, actions?: any, closeLabel?: string, attrs?: object, class?: string }} o
+ *   class: extra classes added to the dialog (the rds-sheet-d class always stays).
  */
 export function sheet(o) {
   if (!o.id) throw new Error('rds: sheet needs an id');
   const titleId = `${o.id}-title`;
-  return `<dialog${attrs({ class: 'rds-sheet-d', id: o.id, 'aria-labelledby': titleId, ...(o.attrs || {}) })}><div class="rds-sheet-d__panel"><header class="rds-sheet-d__head"><h2 class="rds-sheet-d__title" id="${esc(titleId)}">${esc(o.title)}</h2>${iconButton({ label: o.closeLabel || 'Close', icon: 'close', attrs: { 'data-rds-close': true } })}</header><div class="rds-sheet-d__body">${content(o.body)}</div>${has(o.actions) ? `<footer class="rds-sheet-d__actions">${content(o.actions)}</footer>` : ''}</div></dialog>`;
+  return `<dialog${attrs({ class: cx('rds-sheet-d', o.class), id: o.id, 'aria-labelledby': titleId, ...(o.attrs || {}) })}><div class="rds-sheet-d__panel"><header class="rds-sheet-d__head"><h2 class="rds-sheet-d__title" id="${esc(titleId)}">${esc(o.title)}</h2>${iconButton({ label: o.closeLabel || 'Close', icon: 'close', attrs: { 'data-rds-close': true } })}</header><div class="rds-sheet-d__body">${content(o.body)}</div>${has(o.actions) ? `<footer class="rds-sheet-d__actions">${content(o.actions)}</footer>` : ''}</div></dialog>`;
 }
 
 /**
