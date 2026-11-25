@@ -17,3 +17,4 @@ export {
   button,
 } from './components.js';
 export { menuController, sheetController } from './menu-controller.js';
+export { openConfirm } from './confirm.js';

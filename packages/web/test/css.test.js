@@ -39,6 +39,7 @@ describe('web.css rules', () => {
       W.iconButton({ label: 'x', icon: 'add', tone: 'primary' }) + W.iconButton({ label: 'x', icon: 'add', tone: 'danger' }),
       W.menu({ id: 'm', label: 'l', items: [{ label: 'a' }, { label: 'b', tone: 'danger' }] }),
       W.confirm({ id: 'c', title: 't', message: 'm', danger: true }),
+      W.confirm({ id: 'c2', title: 't', message: 'm', note: 'n', typeToConfirm: { value: 'x' }, reason: { min: 0 } }),
       ['primary', 'ghost', 'danger', 'outline'].map((v) => W.button('b', { variant: v })).join(''),
       W.timeline(['card', 'band', 'quiet'].map((variant) => ({ date: '1', sub: 's', kind: 'k', title: 't', body: 'b', variant }))),
       W.emptyState({ title: 't', text: 'x', action: W.raw('<b>a</b>') }) + W.emptyState({ title: 't', variant: 'inline' }),

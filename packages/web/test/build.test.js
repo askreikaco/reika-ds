@@ -9,7 +9,7 @@ describe('build', () => {
     const a = await build(mkdtempSync(join(tmpdir(), 'rds-web-a-')));
     const b = await build(mkdtempSync(join(tmpdir(), 'rds-web-b-')));
     const names = readdirSync(a).sort();
-    expect(names).toEqual(['catalog.html', 'components.js', 'html.js', 'index.js', 'menu-controller.js', 'tokens.css', 'web.css']);
+    expect(names).toEqual(['catalog.html', 'components.js', 'confirm.js', 'html.js', 'index.js', 'menu-controller.js', 'tokens.css', 'web.css']);
     for (const n of names) expect(readFileSync(join(b, n)).equals(readFileSync(join(a, n))), n).toBe(true);
   });
 

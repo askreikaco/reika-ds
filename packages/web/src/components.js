@@ -169,11 +169,37 @@ export function sheet(o) {
   return `<dialog${attrs({ class: 'rds-sheet-d', id: o.id, 'aria-labelledby': titleId, ...(o.attrs || {}) })}><div class="rds-sheet-d__panel"><header class="rds-sheet-d__head"><h2 class="rds-sheet-d__title" id="${esc(titleId)}">${esc(o.title)}</h2>${iconButton({ label: o.closeLabel || 'Close', icon: 'close', attrs: { 'data-rds-close': true } })}</header><div class="rds-sheet-d__body">${content(o.body)}</div>${has(o.actions) ? `<footer class="rds-sheet-d__actions">${content(o.actions)}</footer>` : ''}</div></dialog>`;
 }
 
-/** Confirm dialog: a sheet with a message and two buttons (cancel, confirm). danger:true marks a destructive action. */
+/**
+ * Confirm dialog markup: a sheet with a message, an optional note callout, an optional type-to-confirm input,
+ * an optional reason textarea, an error slot (hidden) and two buttons (cancel, confirm).
+ * danger:true marks a destructive action (alertdialog, red confirm button). Behaviour (showing, gating, pending
+ * state, closing, focus) is in openConfirm() (confirm.js); this function only renders markup.
+ * @param {{ id: string, title: string, message?: any, note?: any, danger?: boolean, role?: 'dialog'|'alertdialog',
+ *   initialFocus?: 'cancel'|'confirm'|'heading', confirmLabel?: string, cancelLabel?: string, errorText?: string,
+ *   typeToConfirm?: { value: string, label?: string }, reason?: { label?: string, min?: number, max?: number } }} o
+ *   note: text or raw() markup, shown as a callout with role=note. Text options are escaped unless raw().
+ *   typeToConfirm.value is compared with the typed text after trim, NFC and lower-casing.
+ *   reason.min (default 3) and reason.max (default 500) bound the trimmed length of the reason.
+ */
 export function confirm(o) {
-  const ok = `<button${attrs({ type: 'button', class: cx('rds-btn', o.danger ? 'rds-btn--danger' : 'rds-btn--primary'), 'data-rds-confirm': true })}>${esc(o.confirmLabel || 'OK')}</button>`;
+  if (!o || !o.id) throw new Error('rds: confirm needs an id');
+  const role = o.role === 'dialog' || o.role === 'alertdialog' ? o.role : o.danger ? 'alertdialog' : 'dialog';
+  const typeId = `${o.id}-type`;
+  const reasonId = `${o.id}-reason`;
+  const reasonMin = o.reason ? (o.reason.min ?? 3) : 0;
+  const gated = Boolean(o.typeToConfirm) || reasonMin > 0; // OK starts disabled; the page script enables it
+  const note = has(o.note) ? `<div class="rds-confirm__note" role="note">${content(o.note)}</div>` : '';
+  const typeField = o.typeToConfirm
+    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(typeId)}">${esc(o.typeToConfirm.label || 'Type to confirm')}</label><input${attrs({ type: 'text', class: 'rds-confirm__input', id: typeId, autocomplete: 'off', spellcheck: 'false', 'data-rds-type': true })}></div>`
+    : '';
+  const reasonField = o.reason
+    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(reasonId)}">${esc(o.reason.label || 'Reason')}</label><textarea${attrs({ class: 'rds-confirm__textarea', id: reasonId, rows: 3, maxlength: o.reason.max ?? 500, 'data-rds-reason': true })}></textarea></div>`
+    : '';
+  const body = `<p class="rds-sheet-d__text">${content(o.message)}</p>${note}${typeField}${reasonField}<p class="rds-confirm__error" role="alert" hidden></p>`;
+  const ok = `<button${attrs({ type: 'button', class: cx('rds-btn', o.danger ? 'rds-btn--danger' : 'rds-btn--primary'), 'data-rds-confirm': true, 'data-danger': o.danger ? true : undefined, disabled: gated ? true : undefined })}>${esc(o.confirmLabel || 'OK')}</button>`;
   const cancel = `<button${attrs({ type: 'button', class: 'rds-btn rds-btn--ghost', 'data-rds-close': true })}>${esc(o.cancelLabel || 'Cancel')}</button>`;
-  return sheet({ id: o.id, title: o.title, closeLabel: o.cancelLabel, body: raw(`<p class="rds-sheet-d__text">${esc(o.message)}</p>`), actions: raw(cancel + ok) });
+  const dialogAttrs = { role, 'data-initial-focus': o.initialFocus };
+  return sheet({ id: o.id, title: o.title, closeLabel: o.cancelLabel, body: raw(body), actions: raw(cancel + ok), attrs: dialogAttrs });
 }
 
 // ---------------------------------------------------------------------------------------------------------------

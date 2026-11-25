@@ -42,6 +42,7 @@ function all(theme) {
   out.push(block('menu (static preview)', W.menu({ id: `mp-${n}`, label: 'Văn An', items: [{ label: 'Sửa quan hệ', value: 'e' }, { label: 'Xem trên cây', value: 't' }, { label: 'Xóa quan hệ', value: 'd', tone: 'danger' }] }).replace(' hidden', ' data-preview')));
   out.push(block('infoTip · toggletip (tap or click; Escape closes)', W.infoTip('Ghi chú chi tiết: nội dung này chỉ hiện khi bấm vào ⓘ.', { id: `tip-${n}`, label: 'Giải thích' })));
   out.push(block('sheet / confirm', W.button('Mở xác nhận', { variant: 'outline', attrs: { 'data-open': `cf-${n}` } }) + W.confirm({ id: `cf-${n}`, title: 'Xóa quan hệ?', message: 'Có thể khôi phục từ lịch sử sửa.', confirmLabel: 'Xóa', cancelLabel: 'Hủy', danger: true })));
+  out.push(block('confirm v2 (note, type-to-confirm, reason, async OK; open from the button)', W.button('Open confirm v2', { variant: 'outline', attrs: { 'data-open': `cf2-${n}` } }) + W.confirm({ id: `cf2-${n}`, title: 'Delete person?', message: 'Relations and notes are removed too.', note: 'Deleted items can be restored from history.', danger: true, initialFocus: 'cancel', typeToConfirm: { value: 'DELETE', label: 'Type DELETE to confirm' }, reason: { label: 'Why? (3-500 characters)', min: 3, max: 500 }, confirmLabel: 'Delete', cancelLabel: 'Keep' })));
   return out.join('');
 }
 
