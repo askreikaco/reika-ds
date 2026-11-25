@@ -43,6 +43,20 @@ All are `--rk-*` custom properties in `tokens.css` (and `$` variables in `_token
 | `--rk-shadow-pop` | `0 0.125rem 0.375rem var(--cds-shadow)` | Overlays only (menus, sheets, toasts). Surfaces keep `--rk-shadow: none`. |
 | `--rk-z-sticky`, `--rk-z-pop`, `--rk-z-modal` | 40, 8000, 8500 | Added layers: sticky toolbars (below the app bar), menus/popovers, modal sheets (below toasts). App layers raised 1, bar 50, shell 100, toast 9000 unchanged. |
 
+## App shell and scrim (generic, 2026-11-25)
+
+Sizes for a generic app shell (header, tabs, side nav). They follow the Carbon UI shell, so Carbon-based apps and non-React apps match. They are not theme-specific.
+
+| Token | Value | Purpose |
+|---|---|---|
+| `--rk-topbar-h` | 3rem | Top bar height (Carbon UI shell header). |
+| `--rk-tabs-h` | 3rem | Tab strip height under the top bar. |
+| `--rk-sidenav-w` | 16rem | Side nav width, expanded. |
+| `--rk-sidenav-rail` | 3rem | Side nav width, collapsed to an icon rail. |
+| `--rk-scrim` | `var(--cds-overlay)` (Carbon overlay: rgba(0,0,0,0.6) in g10 and g100) | Backdrop behind modal sheets and confirm dialogs. |
+
+`--rk-scrim` points at a Carbon token, so the build repeats it in the dark block (a custom property's `var()` is resolved where it is declared).
+
 ## Build and test
 
 ```

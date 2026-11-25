@@ -46,9 +46,9 @@ describe('parity: dist equals the reika-app values in the fixture', () => {
     expect(cssBlock(css, '[data-theme="dark"] {')['rk-tag-background-green']).toBe('#044317');
   });
 
-  it('every dist reika key not in the fixture is app-sourced (workforce or giapha) in _sources', () => {
+  it('every dist reika key not in the fixture names its source in _sources (an app, or generic for Carbon-derived values)', () => {
     const unchecked = Object.keys(d.reika).filter((k) => !(k in fixture.reika));
     expect(unchecked.sort()).toEqual(Object.keys(d.sources).sort());
-    for (const key of unchecked) expect(d.sources[key], `sources.${key}`).toMatch(/^(workforce|giapha) /);
+    for (const key of unchecked) expect(d.sources[key], `sources.${key}`).toMatch(/^(workforce|giapha|generic) /);
   });
 });
