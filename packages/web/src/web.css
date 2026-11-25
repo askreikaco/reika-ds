@@ -355,6 +355,42 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
 .rds-sheet-d__title { margin: 0; font-size: var(--rk-fs-4); line-height: var(--rk-lh-4); font-weight: 400; }
 .rds-sheet-d__text { margin: 0; color: var(--cds-text-secondary); font-size: var(--rk-fs-3); line-height: var(--rk-lh-3); }
 .rds-sheet-d__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--rk-sp-03); }
+/* confirm v2: note callout, type-to-confirm and reason fields, error slot, pending OK (tokens only) */
+.rds-confirm__note {
+  padding: var(--rk-sp-03) var(--rk-sp-04);
+  border-inline-start: var(--rk-sp-01) solid var(--cds-support-info);
+  background: var(--cds-layer-02);
+  color: var(--cds-text-primary);
+  font-size: var(--rk-fs-2);
+  line-height: var(--rk-lh-2);
+}
+.rds-confirm__field { display: grid; gap: var(--rk-sp-02); min-inline-size: 0; }
+.rds-confirm__label { color: var(--cds-text-secondary); font-size: var(--rk-fs-2); line-height: var(--rk-lh-2); }
+.rds-confirm__input,
+.rds-confirm__textarea {
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  min-block-size: var(--rk-touch-min);
+  padding: var(--rk-sp-03) var(--rk-sp-04);
+  border: 0;
+  border-radius: 0;
+  background: var(--cds-field-01);
+  border-block-end: 1px solid var(--cds-border-strong-01);
+  color: var(--cds-text-primary);
+  font: inherit;
+  font-size: var(--rk-fs-3);
+  line-height: var(--rk-lh-3);
+}
+.rds-confirm__textarea { resize: vertical; }
+.rds-confirm__input::placeholder,
+.rds-confirm__textarea::placeholder { color: var(--cds-text-placeholder); }
+.rds-confirm__input:focus-visible,
+.rds-confirm__textarea:focus-visible { outline: var(--rk-focus-ring-outer) solid var(--cds-focus); outline-offset: calc(-1 * var(--rk-focus-ring-outer)); }
+.rds-confirm__error { margin: 0; color: var(--cds-text-error); font-size: var(--rk-fs-2); line-height: var(--rk-lh-2); }
+.rds-confirm__error[hidden] { display: none; }
+.rds-btn.rds-btn:disabled { background: var(--cds-layer-02); color: var(--cds-text-disabled); cursor: not-allowed; }
+.rds-btn[aria-busy='true'] { cursor: progress; }
 
 /* ---- timeline ---- */
 .rds-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--rk-sp-03); }

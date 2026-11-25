@@ -77,6 +77,37 @@ Native `<dialog>` as a bottom sheet (full width on phones, capped at the form me
 danger })`. `sheetController(document, { onConfirm })` wires `[data-rds-close]`, `[data-rds-confirm]` and backdrop
 taps; open with `.open(id)`. Focus returns to whatever opened the dialog when it closes (buttons, Escape, backdrop).
 
+`confirm()` markup takes these extra options (all optional; the old options render as before, plus `role` and the
+hidden error slot):
+- `note`: text or `raw()`; a callout with `role="note"` above the controls.
+- `role`: `'dialog'` by default, `'alertdialog'` when `danger` is true; an explicit `role` wins.
+- `initialFocus`: `'cancel'` (default) | `'confirm'` | `'heading'`, used by `openConfirm`.
+- `typeToConfirm: { value, label }`: a text input; OK stays disabled until the input, trimmed, NFC-normalised and
+  lower-cased, equals `value` (same normalisation).
+- `reason: { label, min = 3, max = 500 }`: a textarea; OK stays disabled until the trimmed length is in `[min, max]`.
+- `errorText`: generic message shown when a rejected `onConfirm` has no `message`.
+- `danger: true` also sets `data-danger` on the confirm button.
+
+`openConfirm(o)` (exported) mounts the dialog in `document.body`, shows it modal and returns a Promise:
+- resolves `{ ok: true }` (or `{ ok: true, reason }` with `reason` set, trimmed) when OK succeeds;
+- resolves `{ ok: false }` on Escape, cancel, the close button or a backdrop tap, and calls `o.onCancel()`;
+- `o.onConfirm(payload)` may return a promise: OK is disabled with `aria-busy="true"` while it runs; it closes on
+  resolve; on reject, `err.message` (or `o.errorText`) is shown in the `role="alert"` slot and OK is re-enabled;
+- the node is removed on close and focus returns to the element that had it before opening.
+Each dialog uses its own callbacks; the global `sheetController` `onConfirm` is not called for these dialogs.
+
+```js
+const r = await openConfirm({
+  title: 'Delete person?', message: 'This cannot be undone.', danger: true,
+  confirmLabel: 'Delete', cancelLabel: 'Keep', initialFocus: 'cancel',
+  typeToConfirm: { value: 'DELETE', label: 'Type DELETE to confirm' },
+  reason: { label: 'Why?', min: 3, max: 500 },
+  onConfirm: ({ reason }) => api.remove(id, reason), // may return a promise
+  errorText: 'Could not delete. Try again.',
+});
+if (r.ok) { /* done */ }
+```
+
 ### infoTip (toggletip)
 `infoTip(text, { id, label })`: an ⓘ button (44px target, accessible name `label`) and a hidden popover with `id`.
 Tap or click opens it; a second tap, Escape or a tap outside closes it, and focus stays on the trigger. Served by the
