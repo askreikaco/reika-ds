@@ -92,8 +92,9 @@ card). Options: `date`, `sub`, `title`, `kind`, `body`, `tag`, `href`, `external
 `emptyState({ title, text, action, variant: 'block' | 'inline' })`, `role="status"`.
 
 ### Icons and tokens
-Icons are Carbon shapes (32 grid, from `@carbon/icons-react`, Apache-2.0). No custom icon files: a new icon is a new
-`ICONS` entry copied from Carbon. Colours, sizes and motion come only from `--rk-*` / `--cds-*` (`@reika-ds/tokens`);
+Icons are Carbon shapes: `ICONS` in `src/html.js` holds the 32px paths copied from `@carbon/icons-react` 11.92.0
+(Apache-2.0). No custom icon files and no hand-drawn icons: a new icon is a new `ICONS` entry copied from Carbon, and
+`test/fixtures/carbon-icons-32.json` must list it. Colours, sizes and motion come only from `--rk-*` / `--cds-*` (`@reika-ds/tokens`);
 the modal scrim is `--rk-scrim` (Carbon overlay in both themes).
 
 ### button

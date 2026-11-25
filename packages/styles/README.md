@@ -113,3 +113,15 @@ Generated from `dist/reika-ds.css` by `node scripts/readme-classes.mjs` (checked
 
 Total: 196 classes.
 <!-- classes:end -->
+
+## Fonts
+
+IBM Plex Sans (400, 500, 600) and IBM Plex Mono (400) are self-hosted in `fonts/` (woff2, from `@ibm/plex` 6.4.1).
+Load `fonts/fonts.css` once; it declares the `@font-face` rules with `font-display: swap` and loads only from the same
+folder (no third-party request). The licence is SIL Open Font License 1.1, in `fonts/LICENSE-OFL.txt`. Apps that copy
+the tarball keep the `fonts/` folder next to `reika-ds.css`.
+
+## Icons
+
+Icons are Carbon's (`@carbon/icons`, Apache-2.0). Decision: Carbon icons everywhere, no custom icon files. React uses
+`@carbon/icons-react`; the HTML helpers in `@reika-ds/web` carry the same 32px shapes (see packages/web/README.md).
