@@ -7,12 +7,12 @@ Status: setting up. Plan: packages/tokens, packages/styles, packages/react, pack
 
 ## Install
 
-No registry account or token needed. Install from the GitHub release tarballs (v0.1.3):
+No registry account or token needed. Install from the GitHub release tarballs (v0.2.0):
 
 ```sh
-npm i https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-react-0.1.3.tgz \
-      https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-styles-0.1.3.tgz \
-      https://github.com/askreikaco/reika-ds/releases/download/v0.1.3/reika-ds-tokens-0.1.3.tgz
+npm i https://github.com/askreikaco/reika-ds/releases/download/v0.2.0/reika-ds-react-0.2.0.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.2.0/reika-ds-styles-0.2.0.tgz \
+      https://github.com/askreikaco/reika-ds/releases/download/v0.2.0/reika-ds-tokens-0.2.0.tgz
 ```
 
 Each tarball's internal dependencies point at the matching release asset, so the URLs above resolve without npm registry access. `SHA256SUMS` is attached to each release. Publishing to the npm registry is planned for later.
