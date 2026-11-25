@@ -34,9 +34,13 @@ menuController(document, { onSelect: ({ value }) => run(value) });
 ### listItem / list
 One item in a list. Variants: `row` (default; hairline between rows), `card` (own layer), `compact` (pickers,
 autocomplete, menus), `tree` (indented by `depth` 0–12 with a guide line), `table-row` (a `<tr>`; `cells` after the
-title; `list(items, { variant: 'table-row', head })` wraps it in a table).
+title; `list(items, { variant: 'table-row', head })` wraps it in a table), `ghost` (accent text, no divider: a quiet
+add or more row under a list).
 Options: `title`, `href`, `meta`, `leading`, `badges`, `trailing`, `action`, `depth`, `muted`, `current`,
 `show: { leading, meta, badges, trailing, chevron }`, `attrs`, `linkAttrs`.
+- `attrs`: an object (values escaped) or a string (raw markup you trust, e.g. `'data-rvx aria-expanded="false"'`).
+- `chevron: true`: shows the chevron without `href` (a button row that opens a sheet or menu).
+- `density: 'dense'`: tighter padding (the 44px touch target stays). `tone: 'danger'`: red title.
 - Do: make the whole item one link; put the editor action in `action` (an `iconButton` option object) — it renders
   as a sibling, and the chevron is dropped.
 - Don't: nest buttons or links inside the item; build a look-alike row by hand; hide meaning in colour only.
@@ -63,9 +67,15 @@ primary, so contrast always passes). Sizes `md`, `sm`. `as: 'button'` + `pressed
 44px square button. Requires `label` (accessible name, also the tooltip). Options: `icon`, `tone` (`primary`,
 `danger`), `pressed`, `haspopup` + `expanded` + `controls` (menu triggers), `attrs`. Icons: `iconNames`.
 
-### menu + menuController
-`menu({ id, label, items })` renders a hidden `role="menu"`. The trigger is an `iconButton` with
-`haspopup: 'menu', controls: id`. `menuController(document, { onSelect })` (one per document):
+### menu + openMenu + menuController
+`openMenu(anchor, { title, items })` mounts a menu next to the anchor and removes it on close. Call it from the
+anchor's click handler: a second call on the same anchor closes the menu. Items: `{ label, onSelect, attrs, tone: 'danger',
+divider: true, disabled, href }`. `attrs` values are escaped; `divider` puts a separator before the item; the title is a
+visible heading. Focus goes to the first item on open; Escape and a choice return focus to the anchor; a tap outside
+closes it. `aria-expanded` is set on the anchor while it is open.
+
+`menu({ id, label, items })` renders a hidden `role="menu"` (items also take `attrs`, `tone` and `divider`). The trigger
+is an `iconButton` with `haspopup: 'menu', controls: id`. `menuController(document, { onSelect })` (one per document):
 - a second tap on the same trigger closes the menu; another trigger switches menus;
 - Escape closes and returns focus to the trigger; a tap outside closes it; arrow keys move between items;
 - opens below when it fits, else above; if neither fits it takes the larger side and scrolls inside — it never covers
@@ -76,6 +86,10 @@ Native `<dialog>` as a bottom sheet (full width on phones, capped at the form me
 `sheet({ id, title, body, actions, closeLabel })`; `confirm({ id, title, message, confirmLabel, cancelLabel,
 danger })`. `sheetController(document, { onConfirm })` wires `[data-rds-close]`, `[data-rds-confirm]` and backdrop
 taps; open with `.open(id)`. Focus returns to whatever opened the dialog when it closes (buttons, Escape, backdrop).
+Options: `closeSelector` adds extra close markers (e.g. `'[data-fpx]'`); `onClose: { [id]: fn }` runs per sheet.
+A trigger with `data-rds-open="<id>"` opens that sheet on click. `openSheet(id, { onClose })` (exported) opens a sheet
+without a controller; `onClose({ id, dialog, returnValue })` runs once when it closes. `sheet({ ..., class })` adds
+extra classes to the dialog (`rds-sheet-d` stays). Focus returns to the opener on every close route.
 
 `confirm()` markup takes these extra options (all optional; the old options render as before, plus `role` and the
 hidden error slot):

@@ -16,5 +16,5 @@ export {
   emptyState,
   button,
 } from './components.js';
-export { menuController, sheetController } from './menu-controller.js';
+export { menuController, sheetController, openMenu, openSheet } from './menu-controller.js';
 export { openConfirm } from './confirm.js';
