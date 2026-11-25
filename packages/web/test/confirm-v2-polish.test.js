@@ -16,7 +16,7 @@ describe('confirm v2 polish', () => {
   it('field class has the field background, bottom border and padding tokens', () => {
     const rule = css.match(/\.rds-confirm__input,\s*\.rds-confirm__textarea,\s*\.rds-field__input\s*\{[^}]*\}/);
     expect(rule).not.toBeNull();
-    expect(rule[0]).toMatch(/background:\s*var\(--cds-field-01\)/);
+    expect(rule[0]).toMatch(/background:\s*var\(--cds-field-02\)/);
     expect(rule[0]).toMatch(/border-block-end:\s*1px solid var\(--cds-border-strong-01\)/);
     expect(rule[0]).toMatch(/padding:\s*var\(--rk-sp-03\) var\(--rk-sp-04\)/);
   });
