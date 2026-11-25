@@ -365,6 +365,8 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
 .rds-sheet-d__body { min-inline-size: 0; overflow-y: auto; }
 .rds-sheet-d__head { display: flex; align-items: center; justify-content: space-between; gap: var(--rk-sp-03); }
 .rds-sheet-d__title { margin: 0; font-size: var(--rk-fs-4); line-height: var(--rk-lh-4); font-weight: 400; }
+/* script-focused headings (tabindex=-1) show no ring on mouse or script focus; keyboard focus rings stay on controls */
+[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
 .rds-sheet-d__text { margin: 0; color: var(--cds-text-secondary); font-size: var(--rk-fs-3); line-height: var(--rk-lh-3); }
 .rds-sheet-d__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--rk-sp-03); }
 /* confirm v2: note callout, type-to-confirm and reason fields, error slot, pending OK (tokens only) */
@@ -376,10 +378,12 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
   font-size: var(--rk-fs-2);
   line-height: var(--rk-lh-2);
 }
+.rds-confirm__note--danger { border-inline-start-color: var(--cds-support-error); color: var(--cds-text-error); }
 .rds-confirm__field { display: grid; gap: var(--rk-sp-02); min-inline-size: 0; }
 .rds-confirm__label { color: var(--cds-text-secondary); font-size: var(--rk-fs-2); line-height: var(--rk-lh-2); }
 .rds-confirm__input,
-.rds-confirm__textarea {
+.rds-confirm__textarea,
+.rds-field__input {
   inline-size: 100%;
   min-inline-size: 0;
   box-sizing: border-box;
@@ -396,9 +400,11 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
 }
 .rds-confirm__textarea { resize: vertical; }
 .rds-confirm__input::placeholder,
-.rds-confirm__textarea::placeholder { color: var(--cds-text-placeholder); }
+.rds-confirm__textarea::placeholder,
+.rds-field__input::placeholder { color: var(--cds-text-placeholder); }
 .rds-confirm__input:focus-visible,
-.rds-confirm__textarea:focus-visible { outline: var(--rk-focus-ring-outer) solid var(--cds-focus); outline-offset: calc(-1 * var(--rk-focus-ring-outer)); }
+.rds-confirm__textarea:focus-visible,
+.rds-field__input:focus-visible { outline: var(--rk-focus-ring-outer) solid var(--cds-focus); outline-offset: calc(-1 * var(--rk-focus-ring-outer)); }
 .rds-confirm__error { margin: 0; color: var(--cds-text-error); font-size: var(--rk-fs-2); line-height: var(--rk-lh-2); }
 .rds-confirm__error[hidden] { display: none; }
 .rds-btn.rds-btn:disabled { background: var(--cds-layer-02); color: var(--cds-text-disabled); cursor: not-allowed; }

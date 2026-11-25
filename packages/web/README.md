@@ -93,7 +93,7 @@ extra classes to the dialog (`rds-sheet-d` stays). Focus returns to the opener o
 
 `confirm()` markup takes these extra options (all optional; the old options render as before, plus `role` and the
 hidden error slot):
-- `note`: text or `raw()`; a callout with `role="note"` above the controls.
+- `note`: text or `raw()`; a callout with `role="note"` above the controls. `noteTone`: `'info'` (default) or `'danger'` (error colour on the left border and text).
 - `role`: `'dialog'` by default, `'alertdialog'` when `danger` is true; an explicit `role` wins.
 - `initialFocus`: `'cancel'` (default) | `'confirm'` | `'heading'`, used by `openConfirm`.
 - `typeToConfirm: { value, label }`: a text input; OK stays disabled until the input, trimmed, NFC-normalised and
