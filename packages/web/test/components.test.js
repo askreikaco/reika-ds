@@ -179,3 +179,38 @@ describe('section, toolbar, tag, buttons', () => {
     expect(e.className).toContain('rds-empty--inline');
   });
 });
+
+describe('infoTip (toggletip)', () => {
+  it('a ⓘ button with an accessible name, aria-expanded false and aria-controls to a hidden popover', () => {
+    const f = dom(W.infoTip('Chi tiết', { id: 'tip-1', label: 'Giải thích' }));
+    const btn = f.querySelector('button.rds-tip__btn');
+    expect(btn.getAttribute('aria-label')).toBe('Giải thích');
+    expect(btn.getAttribute('aria-expanded')).toBe('false');
+    expect(btn.getAttribute('aria-controls')).toBe('tip-1');
+    expect(btn.hasAttribute('data-rds-toggletip')).toBe(true);
+    expect(btn.querySelector('svg.rds-icon')).not.toBeNull();
+    const pop = f.querySelector('#tip-1');
+    expect(pop.hidden).toBe(true);
+    expect(pop.textContent).toBe('Chi tiết');
+    expect(f.querySelector('[role="menu"]')).toBeNull(); // a toggletip is not a menu
+  });
+
+  it('requires an id and an accessible label; escapes its text', () => {
+    expect(() => W.infoTip('x', { label: 'a' })).toThrow(/id/);
+    expect(() => W.infoTip('x', { id: 'a' })).toThrow(/label/);
+    const f = dom(W.infoTip(XSS, { id: 't', label: 'l' }));
+    expect(f.querySelector('#t').querySelector('img')).toBeNull();
+    expect(f.querySelector('#t').textContent).toBe(XSS);
+  });
+
+  it('the information icon is a Carbon shape (no unknown-icon error)', () => {
+    expect(W.iconNames).toContain('information');
+  });
+});
+
+describe('button', () => {
+  it('button: variant class, href renders a link', () => {
+    expect(dom(W.button('Lưu', { variant: 'primary' })).firstElementChild.className).toContain('rds-btn--primary');
+    expect(dom(W.button('Mở', { href: '#x' })).firstElementChild.tagName).toBe('A');
+  });
+});

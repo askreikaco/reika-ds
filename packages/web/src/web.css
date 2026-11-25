@@ -301,6 +301,39 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
 .rds-menu__item--danger { color: var(--cds-text-error); }
 .rds-menu__item:disabled { color: var(--cds-text-disabled); cursor: not-allowed; }
 
+/* ---- infoTip (toggletip): a 44px ⓘ target that keeps the line height; the popover is placed by menu-controller ---- */
+.rds-tip { display: inline-flex; align-items: center; vertical-align: middle; }
+.rds-tip__btn {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--rk-touch-min);
+  block-size: var(--rk-touch-min);
+  margin-block: calc((var(--rk-icon-sm) - var(--rk-touch-min)) / 2);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cds-icon-secondary);
+  cursor: pointer;
+}
+.rds-tip__btn:focus-visible { outline: var(--rk-focus-ring-outer) solid var(--cds-focus); outline-offset: calc(-1 * var(--rk-focus-ring-outer)); }
+.rds-tip__icon { inline-size: var(--rk-icon-sm); block-size: var(--rk-icon-sm); fill: currentColor; }
+@media (hover: hover) { .rds-tip__btn:hover { color: var(--cds-icon-primary); } }
+.rds-tip__pop:not([hidden]) {
+  display: block;
+  position: fixed;
+  z-index: var(--rk-z-pop);
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: min(calc(100vw - 2 * var(--rk-sp-05)), var(--rk-measure-text));
+  padding: var(--rk-sp-03) var(--rk-sp-05);
+  border: 1px solid var(--cds-border-subtle-01);
+  background: var(--cds-layer-01);
+  color: var(--cds-text-primary);
+  font-size: var(--rk-fs-2);
+  line-height: var(--rk-lh-2);
+  box-shadow: var(--rk-shadow-pop);
+}
+
 /* ---- sheet / confirm (native dialog): a bottom sheet, full width on phones, capped at the form measure and
    centred horizontally on wide screens (fluid, no @media) ---- */
 .rds-sheet-d {
@@ -315,7 +348,7 @@ thead .rds-item__cell { color: var(--cds-text-secondary); font-size: var(--rk-fs
   color: var(--cds-text-primary);
   box-shadow: var(--rk-shadow-pop);
 }
-.rds-sheet-d::backdrop { background: var(--cds-overlay); }
+.rds-sheet-d::backdrop { background: var(--rk-scrim); }
 .rds-sheet-d__panel { display: grid; gap: var(--rk-sp-05); padding: var(--rk-sp-05); }
 .rds-sheet-d__body { min-inline-size: 0; overflow-y: auto; }
 .rds-sheet-d__head { display: flex; align-items: center; justify-content: space-between; gap: var(--rk-sp-03); }

@@ -40,6 +40,7 @@ function all(theme) {
   ], { label: 'Timeline' })));
   out.push(block('emptyState · block / inline', W.emptyState({ title: 'Chưa có ai', text: 'Thêm người đầu tiên để bắt đầu.', action: raw(W.button('Thêm người')) }) + W.emptyState({ title: 'Không tìm thấy', variant: 'inline' })));
   out.push(block('menu (static preview)', W.menu({ id: `mp-${n}`, label: 'Văn An', items: [{ label: 'Sửa quan hệ', value: 'e' }, { label: 'Xem trên cây', value: 't' }, { label: 'Xóa quan hệ', value: 'd', tone: 'danger' }] }).replace(' hidden', ' data-preview')));
+  out.push(block('infoTip · toggletip (tap or click; Escape closes)', W.infoTip('Ghi chú chi tiết: nội dung này chỉ hiện khi bấm vào ⓘ.', { id: `tip-${n}`, label: 'Giải thích' })));
   out.push(block('sheet / confirm', W.button('Mở xác nhận', { variant: 'outline', attrs: { 'data-open': `cf-${n}` } }) + W.confirm({ id: `cf-${n}`, title: 'Xóa quan hệ?', message: 'Có thể khôi phục từ lịch sử sửa.', confirmLabel: 'Xóa', cancelLabel: 'Hủy', danger: true })));
   return out.join('');
 }

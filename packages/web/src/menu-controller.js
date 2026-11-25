@@ -1,5 +1,7 @@
-// Pop-up menu behaviour for menu() markup. One controller per document:
+// Pop-up behaviour for menu() markup and infoTip() toggletips. One controller per document:
 //  - a trigger (aria-haspopup="menu", aria-controls="<menu id>") toggles its menu: a second tap closes it;
+//  - a toggletip trigger (data-rds-toggletip, aria-controls="<popover id>") toggles its popover the same way,
+//    but focus stays on the trigger (no menu items to move to);
 //  - tapping another trigger closes the first menu and opens the new one;
 //  - Escape closes and returns focus to the trigger; a tap outside the menu and its trigger closes it;
 //  - the menu opens below the trigger when it fits, else above; if neither fits it takes the larger side and
@@ -61,6 +63,7 @@ export function menuController(doc = document, { onSelect } = {}) {
     open = { menu, trigger };
     doc.addEventListener('pointerdown', onOutside, true);
     doc.addEventListener('keydown', onKey, true);
+    if (menu.getAttribute('role') !== 'menu') return; // toggletip: keep focus where it is
     const first = items(menu)[0];
     if (first) first.focus({ preventScroll: true });
   }
@@ -89,6 +92,13 @@ export function menuController(doc = document, { onSelect } = {}) {
   }
 
   function onClick(e) {
+    const tip = e.target.closest('[data-rds-toggletip][aria-controls]');
+    if (tip) {
+      const same = open && open.trigger === tip;
+      close();
+      if (!same) show(tip);
+      return;
+    }
     const trigger = e.target.closest('[aria-haspopup="menu"][aria-controls]');
     if (trigger) {
       const same = open && open.trigger === trigger;
@@ -128,7 +138,14 @@ export function sheetController(doc = document, { onConfirm } = {}) {
   }
   doc.addEventListener('click', onClick);
   return {
-    open: (id) => doc.getElementById(id)?.showModal(),
+    // Opens the dialog modal; whatever had focus gets it back when the dialog closes (Escape, close, confirm, backdrop).
+    open(id) {
+      const dlg = doc.getElementById(id);
+      if (!dlg) return;
+      const opener = doc.activeElement;
+      dlg.addEventListener('close', () => { if (opener && opener.isConnected) opener.focus({ preventScroll: true }); }, { once: true });
+      dlg.showModal();
+    },
     destroy: () => doc.removeEventListener('click', onClick),
   };
 }
