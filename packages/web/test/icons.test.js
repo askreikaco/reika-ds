@@ -17,6 +17,11 @@ describe('icons are Carbon shapes', () => {
     expect([...iconNames].sort()).toEqual(Object.keys(carbon).sort());
   });
 
+  it('the set has 28 Carbon icons (11 original + 17 added in 0.2.1)', () => {
+    expect(Object.keys(carbon)).toHaveLength(28);
+    expect(iconNames).toHaveLength(28);
+  });
+
   for (const name of Object.keys(carbon)) {
     it(`${name} equals the Carbon 32px shape`, () => {
       expect(inner(icon(name))).toBe(carbon[name]);

@@ -6,6 +6,7 @@ import { root } from '../../tokens/test/helpers';
 // Self-hosted IBM Plex (SIL OFL 1.1): the files, the @font-face rules and the licence ship in the package.
 const dir = join(root, '..', 'styles', 'fonts');
 const files = [
+  'IBMPlexSans-Light.woff2',
   'IBMPlexSans-Regular.woff2',
   'IBMPlexSans-Medium.woff2',
   'IBMPlexSans-SemiBold.woff2',
@@ -25,6 +26,7 @@ describe('self-hosted IBM Plex', () => {
   it('fonts.css declares each file once, with the right family and weight, and loads it from the same folder', () => {
     const faces = [...css.matchAll(/font-family: "([^"]+)"; font-style: normal; font-weight: (\d+);.*?url\("\.\/([^"]+)"\)/g)];
     expect(faces.map((m) => [m[1], m[2], m[3]])).toEqual([
+      ['IBM Plex Sans', '300', 'IBMPlexSans-Light.woff2'],
       ['IBM Plex Sans', '400', 'IBMPlexSans-Regular.woff2'],
       ['IBM Plex Sans', '500', 'IBMPlexSans-Medium.woff2'],
       ['IBM Plex Sans', '600', 'IBMPlexSans-SemiBold.woff2'],
