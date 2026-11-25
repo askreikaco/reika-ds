@@ -202,8 +202,10 @@ export function sheet(o) {
  * state, closing, focus) is in openConfirm() (confirm.js); this function only renders markup.
  * @param {{ id: string, title: string, message?: any, note?: any, danger?: boolean, role?: 'dialog'|'alertdialog',
  *   initialFocus?: 'cancel'|'confirm'|'heading', confirmLabel?: string, cancelLabel?: string, errorText?: string,
- *   typeToConfirm?: { value: string, label?: string }, reason?: { label?: string, min?: number, max?: number } }} o
+ *   typeToConfirm?: { value: string, label?: string }, reason?: { label?: string, min?: number, max?: number },
+ *   noteTone?: 'info'|'danger' }} o
  *   note: text or raw() markup, shown as a callout with role=note. Text options are escaped unless raw().
+ *   noteTone: 'info' (default) or 'danger' (error colour on the note's left border and text, like an inline error).
  *   typeToConfirm.value is compared with the typed text after trim, NFC and lower-casing.
  *   reason.min (default 3) and reason.max (default 500) bound the trimmed length of the reason.
  */
@@ -214,12 +216,12 @@ export function confirm(o) {
   const reasonId = `${o.id}-reason`;
   const reasonMin = o.reason ? (o.reason.min ?? 3) : 0;
   const gated = Boolean(o.typeToConfirm) || reasonMin > 0; // OK starts disabled; the page script enables it
-  const note = has(o.note) ? `<div class="rds-confirm__note" role="note">${content(o.note)}</div>` : '';
+  const note = has(o.note) ? `<div${attrs({ class: cx('rds-confirm__note', { 'rds-confirm__note--danger': o.noteTone === 'danger' }), role: 'note' })}>${content(o.note)}</div>` : '';
   const typeField = o.typeToConfirm
-    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(typeId)}">${esc(o.typeToConfirm.label || 'Type to confirm')}</label><input${attrs({ type: 'text', class: 'rds-confirm__input', id: typeId, autocomplete: 'off', spellcheck: 'false', 'data-rds-type': true })}></div>`
+    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(typeId)}">${esc(o.typeToConfirm.label || 'Type to confirm')}</label><input${attrs({ type: 'text', class: 'rds-confirm__input rds-field__input', id: typeId, autocomplete: 'off', spellcheck: 'false', 'data-rds-type': true })}></div>`
     : '';
   const reasonField = o.reason
-    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(reasonId)}">${esc(o.reason.label || 'Reason')}</label><textarea${attrs({ class: 'rds-confirm__textarea', id: reasonId, rows: 3, maxlength: o.reason.max ?? 500, 'data-rds-reason': true })}></textarea></div>`
+    ? `<div class="rds-confirm__field"><label class="rds-confirm__label" for="${esc(reasonId)}">${esc(o.reason.label || 'Reason')}</label><textarea${attrs({ class: 'rds-confirm__textarea rds-field__input', id: reasonId, rows: 3, maxlength: o.reason.max ?? 500, 'data-rds-reason': true })}></textarea></div>`
     : '';
   const body = `<p class="rds-sheet-d__text">${content(o.message)}</p>${note}${typeField}${reasonField}<p class="rds-confirm__error" role="alert" hidden></p>`;
   const ok = `<button${attrs({ type: 'button', class: cx('rds-btn', o.danger ? 'rds-btn--danger' : 'rds-btn--primary'), 'data-rds-confirm': true, 'data-danger': o.danger ? true : undefined, disabled: gated ? true : undefined })}>${esc(o.confirmLabel || 'OK')}</button>`;

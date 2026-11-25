@@ -6,12 +6,12 @@ import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { assertTagMatches, packRelease } from './pack-release.mjs';
 
-const VERSION = '0.3.0';
+const VERSION = '0.3.1';
 const TARBALLS = [
-  'reika-ds-react-0.3.0.tgz',
-  'reika-ds-styles-0.3.0.tgz',
-  'reika-ds-tokens-0.3.0.tgz',
-  'reika-ds-web-0.3.0.tgz',
+  'reika-ds-react-0.3.1.tgz',
+  'reika-ds-styles-0.3.1.tgz',
+  'reika-ds-tokens-0.3.1.tgz',
+  'reika-ds-web-0.3.1.tgz',
 ];
 
 let out;
@@ -35,16 +35,16 @@ describe('pack-release', () => {
   });
 
   it('rewrites internal deps to the exact release asset URLs', () => {
-    const react = packageJson('reika-ds-react-0.3.0.tgz');
-    const styles = packageJson('reika-ds-styles-0.3.0.tgz');
-    const tokens = packageJson('reika-ds-tokens-0.3.0.tgz');
-    const web = packageJson('reika-ds-web-0.3.0.tgz');
+    const react = packageJson('reika-ds-react-0.3.1.tgz');
+    const styles = packageJson('reika-ds-styles-0.3.1.tgz');
+    const tokens = packageJson('reika-ds-tokens-0.3.1.tgz');
+    const web = packageJson('reika-ds-web-0.3.1.tgz');
 
     expect(react.dependencies['@reika-ds/styles']).toBe(
-      'https://github.com/askreikaco/reika-ds/releases/download/v0.3.0/reika-ds-styles-0.3.0.tgz',
+      'https://github.com/askreikaco/reika-ds/releases/download/v0.3.1/reika-ds-styles-0.3.1.tgz',
     );
     expect(styles.dependencies['@reika-ds/tokens']).toBe(
-      'https://github.com/askreikaco/reika-ds/releases/download/v0.3.0/reika-ds-tokens-0.3.0.tgz',
+      'https://github.com/askreikaco/reika-ds/releases/download/v0.3.1/reika-ds-tokens-0.3.1.tgz',
     );
     expect(tokens.dependencies?.['@reika-ds/styles']).toBeUndefined();
     expect(web.dependencies ?? {}).toEqual({});
@@ -53,14 +53,14 @@ describe('pack-release', () => {
       expect(pj.version).toBe(VERSION);
       for (const [dep, spec] of Object.entries(pj.dependencies ?? {})) {
         if (dep.startsWith('@reika-ds/')) {
-          expect(spec.startsWith('https://github.com/askreikaco/reika-ds/releases/download/v0.3.0/')).toBe(true);
+          expect(spec.startsWith('https://github.com/askreikaco/reika-ds/releases/download/v0.3.1/')).toBe(true);
         }
       }
     }
   });
 
   it('keeps the built payload inside the rewritten tarballs', () => {
-    const list = execFileSync('tar', ['-tzf', join(out, 'reika-ds-react-0.3.0.tgz')], {
+    const list = execFileSync('tar', ['-tzf', join(out, 'reika-ds-react-0.3.1.tgz')], {
       encoding: 'utf8',
     });
     expect(list).toContain('package/dist/index.js');
@@ -87,32 +87,32 @@ describe('pack-release', () => {
 describe('tag guard', () => {
   it('compares the tag when the ref is a tag and it matches', () => {
     expect(() =>
-      assertTagMatches('0.3.0', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.3.0' }),
+      assertTagMatches('0.3.1', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.3.1' }),
     ).not.toThrow();
   });
 
   it('throws when a tag does not match the package version', () => {
     expect(() =>
-      assertTagMatches('0.3.0', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.1.3' }),
-    ).toThrow(/does not match package version v0.3.0/);
+      assertTagMatches('0.3.1', { GITHUB_REF_TYPE: 'tag', GITHUB_REF_NAME: 'v0.1.3' }),
+    ).toThrow(/does not match package version v0.3.1/);
   });
 
   it('skips PR refs such as "20/merge"', () => {
     expect(() =>
-      assertTagMatches('0.3.0', { GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: '20/merge' }),
+      assertTagMatches('0.3.1', { GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: '20/merge' }),
     ).not.toThrow();
   });
 
   it('skips when no ref env is set (local runs)', () => {
-    expect(() => assertTagMatches('0.3.0', {})).not.toThrow();
+    expect(() => assertTagMatches('0.3.1', {})).not.toThrow();
   });
 
   it('compares RELEASE_TAG on a branch run (manual dispatch)', () => {
     expect(() =>
-      assertTagMatches('0.3.0', { RELEASE_TAG: 'v0.3.0', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
+      assertTagMatches('0.3.1', { RELEASE_TAG: 'v0.3.1', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
     ).not.toThrow();
     expect(() =>
-      assertTagMatches('0.3.0', { RELEASE_TAG: 'v0.1.3', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
-    ).toThrow(/RELEASE_TAG v0.1.3 does not match package version v0.3.0/);
+      assertTagMatches('0.3.1', { RELEASE_TAG: 'v0.1.3', GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main' }),
+    ).toThrow(/RELEASE_TAG v0.1.3 does not match package version v0.3.1/);
   });
 });
