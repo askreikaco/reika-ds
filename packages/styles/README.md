@@ -116,7 +116,7 @@ Total: 196 classes.
 
 ## Fonts
 
-IBM Plex Sans (400, 500, 600) and IBM Plex Mono (400) are self-hosted in `fonts/` (woff2, from `@ibm/plex` 6.4.1).
+IBM Plex Sans (300, 400, 500, 600) and IBM Plex Mono (400) are self-hosted in `fonts/` (woff2, from `@ibm/plex` 6.4.1).
 Load `fonts/fonts.css` once; it declares the `@font-face` rules with `font-display: swap` and loads only from the same
 folder (no third-party request). The licence is SIL Open Font License 1.1, in `fonts/LICENSE-OFL.txt`. Apps that copy
 the tarball keep the `fonts/` folder next to `reika-ds.css`.
