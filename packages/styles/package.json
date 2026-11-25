@@ -1,6 +1,6 @@
 {
   "name": "@reika-ds/styles",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": false,
   "description": "Carbon configured once, generated rk- utilities for Carbon gaps, and a consumer lint script.",
   "type": "module",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@carbon/styles": "1.117.0",
-    "@reika-ds/tokens": "0.3.1",
+    "@reika-ds/tokens": "0.3.2",
     "sass": "1.105.2"
   },
   "devDependencies": {}

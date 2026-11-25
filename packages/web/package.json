@@ -1,6 +1,6 @@
 {
   "name": "@reika-ds/web",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": false,
   "description": "HTML-string helpers and CSS for apps without React: list item (row, card, compact, tree, table row), section, toolbar, tag, icon button, menu, sheet, timeline item, empty state.",
   "type": "module",
@@ -24,7 +24,7 @@
     "lint": "node ../styles/scripts/lint-consumer.mjs src/web.css"
   },
   "devDependencies": {
-    "@reika-ds/tokens": "0.3.1",
+    "@reika-ds/tokens": "0.3.2",
     "jsdom": "25.0.1"
   }
 }
