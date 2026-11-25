@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { iconButton, menu, list, menuController } from '../src/index.js';
+import { iconButton, menu, list, menuController, sheetController } from '../src/index.js';
+import * as W from '../src/index.js';
 
 let ctl;
 let selected;
@@ -87,5 +88,106 @@ describe('menu controller', () => {
     expect(document.getElementById('mb').hidden).toBe(false);
     tap(t);
     expect(document.getElementById('mb').hidden).toBe(true);
+  });
+});
+
+describe('toggletip (infoTip) on the same controller', () => {
+  let tctl;
+  beforeEach(() => {
+    ctl.destroy(); // the file-level controller would also handle these triggers
+    document.body.innerHTML = W.infoTip('Ghi chú dài', { id: 'tip-a', label: 'Giải thích A' }) + '<p id="outside2">x</p>';
+    tctl = menuController(document);
+  });
+  afterEach(() => tctl.destroy());
+  const tipBtn = () => document.querySelector('button[data-rds-toggletip]');
+  const pop = () => document.getElementById('tip-a');
+
+  it('tap opens the popover and keeps focus on the trigger (no menu items to move to)', () => {
+    tap(tipBtn());
+    expect(pop().hidden).toBe(false);
+    expect(tipBtn().getAttribute('aria-expanded')).toBe('true');
+    expect(document.activeElement).not.toBe(pop());
+  });
+
+  it('a second tap closes it', () => {
+    tap(tipBtn());
+    tap(tipBtn());
+    expect(pop().hidden).toBe(true);
+    expect(tipBtn().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('Escape closes it and returns focus to the trigger', () => {
+    tap(tipBtn());
+    tipBtn().blur();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(pop().hidden).toBe(true);
+    expect(document.activeElement).toBe(tipBtn());
+  });
+
+  it('a tap outside closes it', () => {
+    tap(tipBtn());
+    tap(document.getElementById('outside2'));
+    expect(pop().hidden).toBe(true);
+    expect(tctl.isOpen()).toBe(false);
+  });
+});
+
+describe('sheet / confirm: focus returns to the opener, close paths', () => {
+  let sctl;
+  let onConfirm;
+  beforeEach(() => {
+    ctl.destroy();
+    // jsdom has no <dialog> modal API: a minimal stand-in that fires 'close' like the browser does.
+    HTMLDialogElement.prototype.showModal ??= function showModal() { this.open = true; this.setAttribute('open', ''); };
+    HTMLDialogElement.prototype.close ??= function close(v = '') {
+      this.open = false;
+      this.removeAttribute('open');
+      this.returnValue = v;
+      this.dispatchEvent(new Event('close'));
+    };
+    document.body.innerHTML =
+      '<button id="opener">Xóa</button>' +
+      W.confirm({ id: 'cf', title: 'Xóa quan hệ?', message: 'Không hoàn tác được.', confirmLabel: 'Xóa', cancelLabel: 'Hủy', danger: true });
+    onConfirm = [];
+    sctl = sheetController(document, { onConfirm: (d) => onConfirm.push(d.dialog.id) });
+  });
+  afterEach(() => sctl.destroy());
+  const dlg = () => document.getElementById('cf');
+
+  it('opens modal and moves nothing else; close button closes and returns focus to the opener', () => {
+    const opener = document.getElementById('opener');
+    opener.focus();
+    sctl.open('cf');
+    expect(dlg().open).toBe(true);
+    tap(dlg().querySelector('[data-rds-close]'));
+    expect(dlg().open).toBe(false);
+    expect(document.activeElement).toBe(opener);
+    expect(onConfirm).toHaveLength(0);
+  });
+
+  it('confirm button calls onConfirm once, closes, and returns focus', () => {
+    const opener = document.getElementById('opener');
+    opener.focus();
+    sctl.open('cf');
+    tap(dlg().querySelector('[data-rds-confirm]'));
+    expect(onConfirm).toEqual(['cf']);
+    expect(dlg().open).toBe(false);
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it('a tap on the backdrop (the dialog element itself) closes it; a tap inside the panel does not', () => {
+    sctl.open('cf');
+    tap(dlg().querySelector('.rds-sheet-d__text'));
+    expect(dlg().open).toBe(true);
+    tap(dlg());
+    expect(dlg().open).toBe(false);
+  });
+
+  it('closing by any other route (Escape in the browser fires close) still returns focus', () => {
+    const opener = document.getElementById('opener');
+    opener.focus();
+    sctl.open('cf');
+    dlg().close('cancel'); // what the browser does on Escape
+    expect(document.activeElement).toBe(opener);
   });
 });

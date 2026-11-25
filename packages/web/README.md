@@ -75,7 +75,13 @@ primary, so contrast always passes). Sizes `md`, `sm`. `as: 'button'` + `pressed
 Native `<dialog>` as a bottom sheet (full width on phones, capped at the form measure and centred when wide).
 `sheet({ id, title, body, actions, closeLabel })`; `confirm({ id, title, message, confirmLabel, cancelLabel,
 danger })`. `sheetController(document, { onConfirm })` wires `[data-rds-close]`, `[data-rds-confirm]` and backdrop
-taps; open with `.open(id)`.
+taps; open with `.open(id)`. Focus returns to whatever opened the dialog when it closes (buttons, Escape, backdrop).
+
+### infoTip (toggletip)
+`infoTip(text, { id, label })`: an ⓘ button (44px target, accessible name `label`) and a hidden popover with `id`.
+Tap or click opens it; a second tap, Escape or a tap outside closes it, and focus stays on the trigger. Served by the
+same `menuController` (no extra script). Use it for "why / what does this mean" detail, never for warnings, errors or
+costs (those stay visible). Keep one-line helper text visible; put longer rules behind a toggletip or a link.
 
 ### timelineItem / timeline
 One entry on a timeline: date column (year + optional `sub`, e.g. the age), rail, box. Variants: `card` (personal or
@@ -84,6 +90,11 @@ card). Options: `date`, `sub`, `title`, `kind`, `body`, `tag`, `href`, `external
 
 ### emptyState
 `emptyState({ title, text, action, variant: 'block' | 'inline' })`, `role="status"`.
+
+### Icons and tokens
+Icons are Carbon shapes (32 grid, from `@carbon/icons-react`, Apache-2.0). No custom icon files: a new icon is a new
+`ICONS` entry copied from Carbon. Colours, sizes and motion come only from `--rk-*` / `--cds-*` (`@reika-ds/tokens`);
+the modal scrim is `--rk-scrim` (Carbon overlay in both themes).
 
 ### button
 Text button: `primary`, `outline`, `ghost`, `danger`; `href` renders a link styled as a button.

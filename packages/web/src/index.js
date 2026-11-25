@@ -10,6 +10,7 @@ export {
   menu,
   sheet,
   confirm,
+  infoTip,
   timelineItem,
   timeline,
   emptyState,

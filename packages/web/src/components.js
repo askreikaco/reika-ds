@@ -177,6 +177,23 @@ export function confirm(o) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// infoTip: ⓘ toggletip for "why / what does this mean" help (conv §36: no hover-only help). Tap or click opens a
+// small popover; a second tap, Escape or a tap outside closes it and Escape returns focus to the trigger.
+// Behaviour is in menu-controller.js (data-rds-toggletip). Put one-line helper text on the page; use this for detail.
+// ---------------------------------------------------------------------------------------------------------------
+/**
+ * @param {string|object} text  popover content (escaped; pass raw() for markup)
+ * @param {{ id: string, label: string, attrs?: object }} o  id: popover id; label: accessible name of the ⓘ button
+ */
+export function infoTip(text, o = {}) {
+  if (!o.id) throw new Error('rds: infoTip needs an id (the trigger points at the popover with aria-controls)');
+  if (!o.label) throw new Error('rds: infoTip needs a label (the accessible name of the ⓘ button)');
+  const btn = `<button${attrs({ type: 'button', class: 'rds-tip__btn', 'aria-label': o.label, title: o.label, 'aria-expanded': 'false', 'aria-controls': o.id, 'data-rds-toggletip': true })}>${icon('information', 'rds-tip__icon')}</button>`;
+  const pop = `<span${attrs({ class: 'rds-tip__pop', id: o.id, hidden: true })}>${content(text)}</span>`;
+  return `<span${attrs({ class: 'rds-tip', ...(o.attrs || {}) })}>${btn}${pop}</span>`;
+}
+
+// ---------------------------------------------------------------------------------------------------------------
 // timelineItem: one entry on a timeline. Variants: card (personal/family event) | band (a span, e.g. a reign)
 // | quiet (context row, e.g. a historical event). The date column shows the year and an optional age line.
 // ---------------------------------------------------------------------------------------------------------------
