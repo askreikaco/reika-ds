@@ -22,22 +22,22 @@
     "test": "vitest run"
   },
   "peerDependencies": {
+    "@carbon/react": "^1.121.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@carbon/react": "1.118.0"
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
-    "@carbon/icons-react": "11.90.0",
+    "@carbon/icons-react": "11.92.0",
     "@reika-ds/styles": "0.3.3"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.2",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.3",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "jsdom": "25.0.1",
     "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1"
+    "react-dom": "18.3.1"
   }
 }
