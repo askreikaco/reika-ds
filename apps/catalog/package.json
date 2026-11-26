@@ -14,7 +14,7 @@
     "@carbon/react": "1.118.0",
     "@reika-ds/react": "*",
     "@reika-ds/styles": "*",
-    "react": "18.3.1",
+    "react": "19.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
