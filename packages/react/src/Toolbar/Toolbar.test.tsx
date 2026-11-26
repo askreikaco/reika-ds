@@ -94,6 +94,32 @@ describe('Toolbar', () => {
     expect(screen.getByText('Example sheet filter')).toBeInTheDocument();
   });
 
+  it('actions render in the same main row as the search input', () => {
+    const { container } = render(
+      <Toolbar search={{ value: '', onChange: () => {} }} actions={<button type="button">Example add</button>} />,
+    );
+    const main = container.querySelector('.rds-toolbar__main') as HTMLElement;
+    expect(main).not.toBeNull();
+    expect(within(main).getByRole('searchbox')).toBeInTheDocument();
+    expect(within(main.querySelector('.rds-toolbar__actions') as HTMLElement).getByRole('button', { name: 'Example add' })).toBeInTheDocument();
+  });
+
+  it('phone: the Filters button is in the main row, not in the controls', () => {
+    setViewport('phone');
+    const { container } = render(
+      <Toolbar search={{ value: '', onChange: () => {} }} filters={<p>Example sheet filter</p>} actions={<button type="button">Example add</button>} />,
+    );
+    const main = container.querySelector('.rds-toolbar__main') as HTMLElement;
+    expect(within(main).getByRole('button', { name: 'Filters' })).toBeInTheDocument();
+    expect(container.querySelector('.rds-toolbar__controls')?.querySelector('.rds-toolbar__filter-button')).toBeNull();
+  });
+
+  it('desktop: inline filters stay in the controls, not the main row', () => {
+    const { container } = render(<Toolbar search={{ value: '', onChange: () => {} }} filters={<p>Example inline filter</p>} />);
+    expect(container.querySelector('.rds-toolbar__controls .rds-toolbar__filters')).not.toBeNull();
+    expect(container.querySelector('.rds-toolbar__main .rds-toolbar__filters')).toBeNull();
+  });
+
   it('density compact adds its modifier class', () => {
     const { container } = render(<Toolbar density="compact" />);
     expect(container.querySelector('.rds-toolbar')).toHaveClass('rds-toolbar--compact');
