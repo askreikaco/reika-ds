@@ -9,8 +9,29 @@
   gap: sp.$spacing-03;
   min-inline-size: 0;
 
+  // Main row: search, phone Filter button and actions in one line that never wraps.
+  &__main {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: sp.$spacing-03;
+    min-inline-size: 0;
+  }
+
   &__search {
     inline-size: 100%;
+  }
+
+  &__main &__search {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  &__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: sp.$spacing-03;
   }
 
   // Quick chips scroll sideways inside their own row, so the page never scrolls sideways.

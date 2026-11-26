@@ -39,6 +39,8 @@ export interface ToolbarProps {
   sort?: { options: ToolbarOption[]; value: string; onChange: (id: string) => void };
   /** Column visibility: each option toggles its id in value. */
   columns?: { options: ToolbarOption[]; value: string[]; onChange: (ids: string[]) => void };
+  /** Buttons at the end of the search row (e.g. primary Add). Same row, never wraps. */
+  actions?: ReactNode;
   /** Result count or summary, shown at the start of the second row. */
   count?: ReactNode;
   density?: 'default' | 'compact';
@@ -47,7 +49,7 @@ export interface ToolbarProps {
 
 // One toolbar above a list or table: search, quick chips, filters, sort, columns, count.
 // Phone: the filters move into a bottom Sheet opened by a Filters button.
-export function Toolbar({ search, quick, onQuick, filters, sort, columns, count, density = 'default', labels }: ToolbarProps) {
+export function Toolbar({ search, quick, onQuick, filters, sort, columns, actions, count, density = 'default', labels }: ToolbarProps) {
   const L = { ...DEFAULT_LABELS, ...labels };
   const phone = useIsPhone();
   const searchId = useId();
@@ -55,30 +57,36 @@ export function Toolbar({ search, quick, onQuick, filters, sort, columns, count,
   const [filtersOpen, setFiltersOpen] = useState(false);
   const size = density === 'compact' ? 'sm' : 'md';
 
-  const filterControl = filters ? (
-    phone ? (
+  // Phone: the Filter button sits in the main row. Desktop: inline filters stay in the controls.
+  const phoneFilterButton =
+    filters && phone ? (
       <Button kind="tertiary" size={size} renderIcon={Filter} onClick={() => setFiltersOpen(true)} className="rds-toolbar__filter-button">
         {L.filters}
       </Button>
-    ) : (
-      <div className="rds-toolbar__filters">{filters}</div>
-    )
-  ) : null;
+    ) : null;
+  const filterControl = filters && !phone ? <div className="rds-toolbar__filters">{filters}</div> : null;
+  const showMain = Boolean(search || actions || phoneFilterButton);
 
   return (
     <div className={`rds-toolbar rds-toolbar--${density}`}>
-      {search ? (
-        <Search
-          id={searchId}
-          size={size}
-          labelText={L.searchLabel}
-          placeholder={search.placeholder ?? L.searchLabel}
-          closeButtonLabelText={L.clearSearch}
-          value={search.value}
-          onChange={(event) => search.onChange(event.target.value)}
-          onClear={() => search.onChange('')}
-          className="rds-toolbar__search"
-        />
+      {showMain ? (
+        <div className="rds-toolbar__main">
+          {search ? (
+            <Search
+              id={searchId}
+              size={size}
+              labelText={L.searchLabel}
+              placeholder={search.placeholder ?? L.searchLabel}
+              closeButtonLabelText={L.clearSearch}
+              value={search.value}
+              onChange={(event) => search.onChange(event.target.value)}
+              onClear={() => search.onChange('')}
+              className="rds-toolbar__search"
+            />
+          ) : null}
+          {phoneFilterButton}
+          {actions ? <div className="rds-toolbar__actions">{actions}</div> : null}
+        </div>
       ) : null}
 
       {quick && quick.length > 0 ? (
