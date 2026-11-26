@@ -10,8 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@carbon/icons-react": "^11.90.0",
-    "@carbon/react": "1.118.0",
+    "@carbon/icons-react": "^11.92.0",
+    "@carbon/react": "1.121.0",
     "@reika-ds/react": "*",
     "@reika-ds/styles": "*",
     "react": "18.3.1",
