@@ -1,11 +1,1 @@
-{
-  "permissions": {
-    "deny": [
-      "mcp__claude-code-remote__archive_session",
-      "mcp__claude-code-remote__interrupt_session"
-    ],
-    "ask": [
-      "mcp__claude-code-remote__create_session"
-    ]
-  }
-}
+{"permissions":{"deny":["mcp__claude-code-remote__archive_session","mcp__claude-code-remote__interrupt_session"],"ask":["mcp__claude-code-remote__create_session","mcp__REIKA__danger","mcp__REIKA_VN__danger","mcp__https_mcp_reika_vn__danger","mcp__DIGITALOCEAN__droplet-create","mcp__DIGITALOCEAN__droplet-delete","mcp__DIGITALOCEAN__resize-droplet","mcp__DIGITALOCEAN__rebuild-droplet","mcp__DIGITALOCEAN__rebuild-droplet-by-slug","mcp__DIGITALOCEAN__restore-droplet","mcp__DIGITALOCEAN__image-delete","mcp__DIGITALOCEAN__image-create","mcp__DIGITALOCEAN__snapshot-droplet","mcp__DIGITALOCEAN__snapshot-droplets-tag","mcp__DIGITALOCEAN__enable-backups-droplet","mcp__DIGITALOCEAN__enable-backups-droplets-tag","mcp__DIGITALOCEAN__power-off-droplet","mcp__DIGITALOCEAN__power-off-droplets-tag","mcp__DIGITALOCEAN__shutdown-droplet","mcp__DIGITALOCEAN__shutdown-droplets-tag","mcp__DIGITALOCEAN__reset-droplet-password","mcp__Upwork__upwork__post_job","mcp__Upwork__upwork__manage_offers","mcp__Upwork__upwork__respond_to_offer","mcp__Upwork__upwork__end_contract","mcp__Upwork__upwork__manage_milestones","mcp__Upwork__upwork__submit_milestones","mcp__Upwork__upwork__boost_profile","mcp__Upwork__upwork__update_contract","mcp__DIGITALOCEAN__droplet-action","mcp__DIGITALOCEAN__reboot-droplet","mcp__DIGITALOCEAN__power-cycle-droplet","mcp__DIGITALOCEAN__power-cycle-droplets-tag","mcp__DIGITALOCEAN__change-kernel-droplet","mcp__DIGITALOCEAN__disable-backups-droplet","mcp__DIGITALOCEAN__disable-backups-droplets-tag","mcp__DIGITALOCEAN__droplet-backup-policy","mcp__DIGITALOCEAN__image-action-transfer","mcp__DIGITALOCEAN__image-action-convert"],"allow":["Bash(gh api -X POST repos/askreikaco/*)","Bash(gh api -X PUT repos/askreikaco/*)","Bash(gh pr ready *)","Agent","SendMessage","mcp__https_mcp_reika_vn__*","mcp__github__*","Bash(npx tsc --noEmit)","mcp__claude-code-remote__list_repos","Bash","Read","Edit","Write","Glob","Grep","WebFetch","WebSearch","mcp__REIKA","mcp__REIKA_VN","mcp__https_mcp_reika_vn","mcp__github","mcp__Google_Drive","mcp__Google_Sheets","mcp__Google_Docs","mcp__Google_Slides","mcp__Google_Calendar","mcp__Gmail","mcp__Figma","mcp__HubSpot","mcp__Claude_Docs","mcp__DIGITALOCEAN","mcp__Upwork","mcp__Clutch_co","mcp__claude-code-remote","NotebookEdit"]}}
